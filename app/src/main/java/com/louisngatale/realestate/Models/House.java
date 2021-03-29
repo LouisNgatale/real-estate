@@ -1,12 +1,14 @@
 package com.louisngatale.realestate.Models;
 
+import android.graphics.drawable.Drawable;
+
 public class House {
     private String house_name;
-    private String house_image;
+    private int house_image;
     private Integer house_price;
     private String house_description;
 
-    public House(String house_name, String house_image, int house_price, String house_description) {
+    public House(String house_name, int house_image, int house_price, String house_description) {
         this.house_name = house_name;
         this.house_image = house_image;
         this.house_price = house_price;
@@ -27,11 +29,11 @@ public class House {
         this.house_name = house_name;
     }
 
-    public String getHouse_image() {
+    public int getHouse_image() {
         return house_image;
     }
 
-    public void setHouse_image(String house_image) {
+    public void setHouse_image(int house_image) {
         this.house_image = house_image;
     }
 

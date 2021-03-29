@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">Real Estate</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="header">Find your Dream</string>
     <string name="stay">Stay</string>
     <string name="house_name">House name here</string>
     <string name="house_description">Description here</string>
     <string name="house_price">Price here</string>
+    <string name="browse_houses">Browse houses</string>
+    <string name="category">Cabins and cottages</string>
 
 
 </resources>

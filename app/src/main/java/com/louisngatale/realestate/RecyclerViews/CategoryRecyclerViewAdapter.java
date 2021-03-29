@@ -1,10 +1,12 @@
 package com.louisngatale.realestate.RecyclerViews;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,11 +22,11 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private ImageView imageView;
+        private ImageView house_image,wishlist;
         private TextView house_name, house_description, house_price;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.category_1_house_image);
+            house_image = itemView.findViewById(R.id.category_1_house_image);
             house_name = itemView.findViewById(R.id.category_1_house_name);
             house_description = itemView.findViewById(R.id.category_1_house_description);
             house_price = itemView.findViewById(R.id.category_1_house_price);
@@ -34,7 +36,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     @NonNull
     @Override
     public CategoryRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_1_list_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.categories_list_item,parent,false);
         return new ViewHolder(view);
     }
 
@@ -43,6 +45,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         holder.house_name.setText(house.get(position).getHouse_name());
         holder.house_description.setText(house.get(position).getHouse_description());
         holder.house_price.setText(house.get(position).getHouse_price());
+        holder.house_image.setImageResource(house.get(position).getHouse_image());
     }
 
     @Override
