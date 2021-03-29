@@ -1,6 +1,8 @@
 package com.louisngatale.realestate.RecyclerViews;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
+import com.louisngatale.realestate.Screens.ItemView.ItemViewActivity;
+
 import java.util.ArrayList;
 
 public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecyclerViewAdapter.ViewHolder> {
@@ -46,6 +50,14 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
             }
         });
 
+//                TODO: ItemView click listener
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent itemView = new Intent(mContext, ItemViewActivity.class);
+                mContext.startActivity(itemView);
+            }
+        });
 
     }
 

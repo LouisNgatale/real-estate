@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Screens.ItemView.ItemViewActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/fab"
+        android:src="@drawable/fab"
+        android:focusable="true"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/itemView_image"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:src="@drawable/house_2"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <TextView
+        android:id="@+id/itemView_house_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/house_type"
+        android:textColor="@color/orange"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_image" />
+
+    <TextView
+        android:id="@+id/itemView_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"
+        android:text="@string/price_placeholder"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_house_type" />
+
+    <TextView
+        android:id="@+id/itemView_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/address_placeholder"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_price" />
+
+    <ImageView
+        android:id="@+id/itemView_bed_icon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/bed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_address"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/itemView_bed_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/bed_placeholder"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/itemView_bed_icon"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_address" />
+
+    <ImageView
+        android:id="@+id/itemView_bath_icon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/bath"
+        app:layout_constraintStart_toEndOf="@+id/itemView_bed_count"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_address"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/itemView_size_icon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/itemView_bath_count"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_address"
+        app:srcCompat="@drawable/size"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/itemView_bath_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/bath_placeholder"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/itemView_bath_icon"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_address" />
+
+    <TextView
+        android:id="@+id/itemView_size_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/size_placeholder"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/itemView_size_icon"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_address" />
+
+    <TextView
+        android:id="@+id/itemView_description_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/house_description"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_bed_icon" />
+
+    <TextView
+        android:id="@+id/itemView_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/description_placeholder"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_description_title" />
+
+    <TextView
+        android:id="@+id/itemView_agent_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/agent_title"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_description" />
+
+    <ImageView
+        android:id="@+id/itemView_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/itemView_call"
+        app:layout_constraintEnd_toStartOf="@+id/itemView_call"
+        app:srcCompat="@drawable/message"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/itemView_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_agent_title"
+        app:srcCompat="@drawable/phone_call"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/itemView_agent_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/name_placeholder"
+        app:layout_constraintStart_toEndOf="@+id/itemView_agent_photo"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_agent_title" />
+
+    <TextView
+        android:id="@+id/itemView_agent_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/agent_position"
+        app:layout_constraintStart_toEndOf="@+id/itemView_agent_photo"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_agent_name" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/itemView_agent_photo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/blank"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemView_agent_title" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

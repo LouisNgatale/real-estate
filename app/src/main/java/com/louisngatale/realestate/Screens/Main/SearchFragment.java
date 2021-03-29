@@ -1,4 +1,4 @@
-package com.louisngatale.realestate.Screens;
+package com.louisngatale.realestate.Screens.Main;
 
 import android.os.Bundle;
 

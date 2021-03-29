@@ -1,4 +1,4 @@
-package com.louisngatale.realestate.Screens;
+package com.louisngatale.realestate.Screens.Splash;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.louisngatale.realestate.R;
+import com.louisngatale.realestate.Screens.Main.MainActivity;
 
 public class SplashScreen extends AppCompatActivity {
 
