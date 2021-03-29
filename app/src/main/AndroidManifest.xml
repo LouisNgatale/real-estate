@@ -9,11 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RealEstate">
-        <activity android:name=".Screens.ItemView.ItemViewActivity"></activity>
-        <activity android:name=".Screens.Splash.SplashScreen">
+        <activity android:name=".Screens.ItemView.ItemViewActivity" />
+        <activity android:name=".Screens.Splash.SplashScreen" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

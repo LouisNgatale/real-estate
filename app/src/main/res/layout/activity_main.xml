@@ -19,7 +19,5 @@
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation"
         android:background="?android:attr/windowBackground"
-        app:elevation="20dp"
-        />
-
+        app:elevation="20dp"/>
 </RelativeLayout>

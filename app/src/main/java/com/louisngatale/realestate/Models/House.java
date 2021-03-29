@@ -7,19 +7,22 @@ public class House {
     private int house_image;
     private Integer house_price;
     private String house_description;
+    private String address;
     private boolean saved = false;
 
-    public House(String house_name, int house_image, int house_price, String house_description) {
+    public House(String house_name, int house_image, int house_price, String house_description,String address) {
         this.house_name = house_name;
         this.house_image = house_image;
         this.house_price = house_price;
         this.house_description = house_description;
+        this.address = address;
     }
 
-    public House(String house_name, int house_price, String house_description) {
+    public House(String house_name, int house_price, String house_description, String address) {
         this.house_name = house_name;
         this.house_price = house_price;
         this.house_description = house_description;
+        this.address = address;
     }
 
     public House() {
@@ -63,5 +66,17 @@ public class House {
 
     public void setSaved(boolean saved) {
         this.saved = saved;
+    }
+
+    public void setHouse_price(Integer house_price) {
+        this.house_price = house_price;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

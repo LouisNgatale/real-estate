@@ -3,8 +3,10 @@ package com.louisngatale.realestate.Screens.Splash;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.Screens.Main.MainActivity;
@@ -27,6 +29,6 @@ public class SplashScreen extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        },3000);
+        },1000);
     }
 }

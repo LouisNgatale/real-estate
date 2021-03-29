@@ -9,7 +9,7 @@
     <string name="browse_houses">Browse houses</string>
     <string name="category">Cabins and cottages</string>
     <string name="house_type">House Type</string>
-    <string name="price_placeholder">200,000 Tsh</string>
+    <string name="price_placeholder">200,000 Tsh/ Month</string>
     <string name="address_placeholder">Street, City, Country</string>
     <string name="bed_placeholder">2 beds</string>
     <string name="size_placeholder">1560 sqft</string>
@@ -18,6 +18,9 @@
     <string name="agent_title">Listing Agent</string>
     <string name="name_placeholder">John Doe</string>
     <string name="agent_position">Owner</string>
+    <string name="empty_wishList">No saved Items</string>
+    <string name="initial_count">0</string>
+    <string name="wish_list_title">Wish List</string>
 
 
 </resources>
