@@ -24,9 +24,11 @@
         android:id="@+id/itemView_image"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:src="@drawable/house_2"
         android:scaleType="centerCrop"
-        tools:ignore="ContentDescription,MissingConstraints" />
+        android:src="@drawable/house_2"
+        tools:ignore="ContentDescription,MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <TextView
         android:id="@+id/itemView_house_type"

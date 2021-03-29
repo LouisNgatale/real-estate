@@ -17,6 +17,7 @@ import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.RecyclerViews.BrowseRecyclerViewAdapter;
 import com.louisngatale.realestate.RecyclerViews.CategoryRecyclerViewAdapter;
+import com.louisngatale.realestate.Utils.HouseUtils;
 
 import java.util.ArrayList;
 
@@ -42,21 +43,8 @@ public class HomeFragment extends Fragment {
         browseRecyclerViewAdapter = new BrowseRecyclerViewAdapter(getContext());
 
 //        TODO: Load category list items from database
-        ArrayList<House> houses = new ArrayList<>();
-        houses.add(new House("First House",R.drawable.house_1,20000,"This is my first house"));
-        houses.add(new House("Second House",R.drawable.house_6,20000,"This is my second house"));
-        houses.add(new House("Third House",R.drawable.house_8,20000,"This is my third house"));
-        houses.add(new House("Fourth House",R.drawable.house_2,20000,"This is my fourth house"));
 
 //        TODO: Load browser list items from database
-        ArrayList<House> browse_houses = new ArrayList<>();
-        browse_houses.add(new House("First House",R.drawable.house_1,20000,"This is my first house"));
-        browse_houses.add(new House("Second House",R.drawable.house_2,234422,"This is my second house"));
-        browse_houses.add(new House("Third House",R.drawable.house_3,234214,"This is my third house"));
-        browse_houses.add(new House("Fourth House",R.drawable.house_5,43214214,"This is my fourth house"));
-        browse_houses.add(new House("Fourth House",R.drawable.house_6,43214214,"This is my fourth house"));
-        browse_houses.add(new House("Fourth House",R.drawable.house_8,43214214,"This is my fourth house"));
-        browse_houses.add(new House("Fourth House",R.drawable.house_9,43214214,"This is my fourth house"));
 
         recyclerView.setAdapter(categoryRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
@@ -70,8 +58,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        browseRecyclerViewAdapter.setHouse(browse_houses);
-        categoryRecyclerViewAdapter.setHouse(houses);
+        HouseUtils.getInstance();
+        browseRecyclerViewAdapter.setHouse(HouseUtils.getBrowse_houses());
+        HouseUtils.getInstance();
+        categoryRecyclerViewAdapter.setHouse(HouseUtils.getHouses());
 
     }
 }

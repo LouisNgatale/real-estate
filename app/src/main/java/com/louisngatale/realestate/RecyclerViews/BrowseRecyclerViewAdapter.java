@@ -41,12 +41,27 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
         holder.house_price.setText(house.get(position).getHouse_price());
         holder.house_image.setImageResource(house.get(position).getHouse_image());
 
+        if (house.get(position).isSaved()) {
+            holder.wishlist.setImageResource(R.drawable.tab_saved_orange);
+        } else {
+            holder.wishlist.setImageResource(R.drawable.tab_saved_white);
+        }
+
+
 //        TODO: Global click listener function
 //        TODO: Add item to wish list
         holder.wishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "Item saved", Toast.LENGTH_SHORT).show();
+                if (house.get(position).isSaved()) {
+                    house.get(position).setSaved(false);
+                    holder.wishlist.setImageResource(R.drawable.tab_saved_white);
+                    Toast.makeText(mContext, "Item removed", Toast.LENGTH_SHORT).show();
+                } else {
+                    house.get(position).setSaved(true);
+                    holder.wishlist.setImageResource(R.drawable.tab_saved_orange);
+                    Toast.makeText(mContext, "Item added", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -55,6 +70,7 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
             @Override
             public void onClick(View v) {
                 Intent itemView = new Intent(mContext, ItemViewActivity.class);
+                itemView.putExtra("id", position);
                 mContext.startActivity(itemView);
             }
         });

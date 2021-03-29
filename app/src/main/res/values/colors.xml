@@ -8,6 +8,8 @@
     <!--   color for the app bar and other primary UI elements -->
     <color name="white">#FFFFFFFF</color>
 
+    <color name="statusBar">#00FFFFFF</color>
+
     <!--   a darker variant of the primary color, used for
            the status bar (on Android 5.0+) and contextual app bars -->
     <color name="mid_white">#F3F3F3</color>

@@ -5,12 +5,16 @@
         <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryVariant">@color/orange_700</item>
         <item name="colorOnPrimary">@color/mid_grey</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/white</item>
         <item name="colorSecondaryVariant">@color/mid_white</item>
         <item name="colorOnSecondary">@color/black</item>
+
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
         <!-- Customize your theme here. -->
 
     </style>
