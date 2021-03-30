@@ -21,6 +21,7 @@
     <string name="empty_wishList">No saved Items</string>
     <string name="initial_count">0</string>
     <string name="wish_list_title">Wish List</string>
+    <string name="search_placeholder">Search</string>
 
 
 </resources>
