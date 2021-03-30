@@ -22,6 +22,15 @@
     <string name="initial_count">0</string>
     <string name="wish_list_title">Wish List</string>
     <string name="search_placeholder">Search</string>
+    <string name="add_hosting">Add hosting</string>
 
 
+    <string-array name="house_types">
+        <item>Apartment</item>
+        <item>House</item>
+        <item>Secondary Unit</item>
+        <item>Unique space</item>
+        <item>Bed and breakfast</item>
+        <item>Boutique hotel</item>
+    </string-array>
 </resources>
