@@ -1,5 +1,6 @@
 package com.louisngatale.realestate.Screens.Main;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -43,6 +44,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     ArrayList<House> house;
     Boolean addressIsSet = false;
     private boolean locationPermissionGranted;
+
+    private static final int LOCATION_PERMISSION_CODE = 100;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,18 +125,58 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     private void getLocationPermission() {
+
+
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_DENIED) {
+            // Request permission
+            ActivityCompat.requestPermissions(getActivity(),
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                LOCATION_PERMISSION_CODE);
+
+        } else {
+            Toast.makeText(getActivity(), "Request granted", Toast.LENGTH_SHORT).show();
+            Intent maps = new Intent(getContext(), Map.class);
+            startActivity(maps);
+        }
+
         /*
          * Request location permission, so that we can get the location of the
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
-        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
+        /*if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             Intent maps = new Intent(getContext(), Map.class);
             startActivity(maps);
         } else {
             Toast.makeText(getContext(), "Request denied", Toast.LENGTH_SHORT).show();
+        }*/
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == LOCATION_PERMISSION_CODE){
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(),
+                        "Permission Granted",
+                        Toast.LENGTH_SHORT)
+                        .show();
+
+
+            }
+            else {
+                Toast.makeText(getContext(),
+                        "Permission Denied",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
         }
     }
 
