@@ -1,10 +1,14 @@
 package com.louisngatale.realestate.Screens.Main;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -20,14 +24,16 @@ import android.widget.Toast;
 
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
+import com.louisngatale.realestate.Screens.Map;
 import com.louisngatale.realestate.Utils.HouseUtils;
 import com.louisngatale.realestate.Utils.Validator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 public class DashboardFragment extends Fragment implements AdapterView.OnItemSelectedListener , View.OnClickListener {
+//    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = ;
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
     TextView address;
@@ -36,6 +42,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     HashMap<String,String> errors = new HashMap<>();
     ArrayList<House> house;
     Boolean addressIsSet = false;
+    private boolean locationPermissionGranted;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,13 +111,29 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 validateForm();
                 break;
             case R.id.choose_address:
-                Toast.makeText(getContext(), "Address", Toast.LENGTH_SHORT).show();
+                getLocationPermission();
                 break;
             case R.id.addImages:
                 Toast.makeText(getContext(), "Add Images", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            Intent maps = new Intent(getContext(), Map.class);
+            startActivity(maps);
+        } else {
+            Toast.makeText(getContext(), "Request denied", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -143,4 +166,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         }*/
 
     }
+
+    
 }
