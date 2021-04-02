@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -39,6 +40,7 @@ import com.louisngatale.realestate.Screens.Map;
 import com.louisngatale.realestate.Utils.Validator;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
@@ -186,16 +188,22 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
         switch (type) {
             case "Camera":
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                Uri imageUri = data.getData();
 
+                Log.d(TAG, "addImage: " + imageUri);
+
+                Bundle extras = Objects.requireNonNull(data).getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
 
                 previewAdapter.getImages().add(imageBitmap);
 
                 previewAdapter.notifyDataSetChanged();
+
+//                Get actual Path
                 break;
             case "Picker":
                 Uri selectedImg = data.getData();
+                Log.d(TAG, "addImage: " + selectedImg);
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(Objects.requireNonNull(getContext()).getContentResolver(),selectedImg);
                     if (bitmap!= null) {
@@ -211,6 +219,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         }
 
     }
+
+
 
     /**
     * Validate form fields after the user has pressed
