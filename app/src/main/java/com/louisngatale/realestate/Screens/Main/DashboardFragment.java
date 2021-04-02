@@ -48,7 +48,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
     TextView address;
-    Button chooseAddress, addImage, submit;
+    Button chooseAddress, takePhoto, submit,addImages;
     String bedRoomsValue, bathRoomsValue, houseSizeValue, priceValue, descriptionValue, addressValue,houseTypeValue;
     private boolean locationPermissionGranted, isAddress = false;
     HashMap<String,String> addressResult;
@@ -86,8 +86,9 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         description = view.findViewById(R.id.description);
         address = view.findViewById(R.id.address);
         chooseAddress = view.findViewById(R.id.choose_address);
-        addImage = view.findViewById(R.id.takePhoto);
+        takePhoto = view.findViewById(R.id.takePhoto);
         submit = view.findViewById(R.id.submit);
+        addImages = view.findViewById(R.id.addImages);
 
         imagePreviewRecView = view.findViewById(R.id.imagePreviewRecView);
 
@@ -95,7 +96,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
         submit.setOnClickListener(this);
 
-        addImage.setOnClickListener(this);
+
+        takePhoto.setOnClickListener(this);
 
         chooseAddress.setOnClickListener(this);
     }
