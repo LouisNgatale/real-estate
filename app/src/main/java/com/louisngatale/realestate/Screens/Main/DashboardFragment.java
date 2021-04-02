@@ -42,7 +42,11 @@ import java.util.Objects;
 
 public class DashboardFragment extends Fragment implements AdapterView.OnItemSelectedListener , View.OnClickListener {
 //    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = ;
-    private static final int MAPS_ACTIVITY_REQUEST_CODE = 101,REQUEST_IMAGE_CAPTURE = 102;
+    private static final int LOCATION_PERMISSION_CODE = 100,
+        MAPS_ACTIVITY_REQUEST_CODE = 101,
+        REQUEST_IMAGE_CAPTURE = 102,
+        EXTERNAL_STORAGE_PERMISSION_CODE = 103;
+    ;
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
     TextView address;
@@ -51,8 +55,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     private boolean locationPermissionGranted, isAddress = false;
     HashMap<String,String> addressResult;
     RecyclerView imagePreviewRecView;
-
-    private static final int LOCATION_PERMISSION_CODE = 100;
     private final String TAG = "Dashboard";
 
     @Override
@@ -118,17 +120,40 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 validateForm();
                 break;
             case R.id.choose_address:
-                getLocationPermission();
+                checkLocationPermission();
                 break;
             case R.id.addImages:
-                dispatchTakePictureIntent();
+                checkCameraPermissions();
                 break;
             default:
                 break;
         }
     }
 
-    private void getLocationPermission() {
+    /**
+     * Check camera permissions
+     * @Author: Eng. Louis Ngatale
+     */
+    private void checkCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED) {
+            // Request permission
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    EXTERNAL_STORAGE_PERMISSION_CODE);
+
+        } else {
+            dispatchTakePictureIntent();
+        }
+    }
+
+
+    /**
+     * Check location permissions
+     * @Author: Eng. Louis Ngatale
+     */
+    private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_DENIED) {
@@ -144,29 +169,50 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
+    /**
+    * Request permission to access different features
+    * @Author: Eng. Louis Ngatale
+    * **/
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == LOCATION_PERMISSION_CODE){
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getContext(),
-                        "Permission Granted",
-                        Toast.LENGTH_SHORT)
-                        .show();
-
-
-            }
-            else {
-                Toast.makeText(getContext(),
-                        "Permission Denied",
-                        Toast.LENGTH_SHORT)
-                        .show();
-            }
+        switch (requestCode) {
+            case LOCATION_PERMISSION_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(),
+                            "Permission Granted",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Toast.makeText(getContext(),
+                            "Permission Denied",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            case EXTERNAL_STORAGE_PERMISSION_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dispatchTakePictureIntent();
+                } else {
+                    Toast.makeText(getContext(),
+                            "Permission Denied",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
         }
     }
 
+    
+    /**
+    * Validate form fields after the user has pressed 
+    * the submit function. Call Validator class's validate 
+    * function and pass the values through Hash Map
+    * @Author: Eng. Louis Ngatale
+    * **/
     public void validateForm(){
 //        Validate price
         HashMap<String,String> values = new HashMap<>();
@@ -191,9 +237,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 Toast.makeText(getContext(), formResults.get("Address"), Toast.LENGTH_SHORT).show();
             }
 
-        }else {
-//            TODO: Save the details
-        }
+        } //            TODO: Save the details
+
     }
 
     @Override
@@ -203,11 +248,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         switch (requestCode) {
             case MAPS_ACTIVITY_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    addressResult = (HashMap<String, String>) data.getSerializableExtra("Address");
-                    address.setText(addressResult.get("Address"));
-                    isAddress = true;
+                    startMap(data);
                 } else if (resultCode == Activity.RESULT_CANCELED) {
-                    //Write your code if there's no result
                     Toast.makeText(getContext(), "Couldn't get address", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -218,7 +260,15 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 //                    imageView.setImageBitmap(imageBitmap);
                 }
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + requestCode);
         }
+    }
+
+    private void startMap(@Nullable Intent data) {
+        addressResult = (HashMap<String, String>) data.getSerializableExtra("Address");
+        address.setText(addressResult.get("Address"));
+        isAddress = true;
     }
 
     private void dispatchTakePictureIntent() {
