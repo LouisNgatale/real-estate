@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
@@ -25,18 +26,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
+import com.louisngatale.realestate.RecyclerViews.CameraPreviewRecyclerAdapter;
 import com.louisngatale.realestate.Screens.Map;
-import com.louisngatale.realestate.Utils.HouseUtils;
 import com.louisngatale.realestate.Utils.Validator;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -56,6 +54,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     HashMap<String,String> addressResult;
     RecyclerView imagePreviewRecView;
     private final String TAG = "Dashboard";
+    CameraPreviewRecyclerAdapter previewAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,8 +86,12 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         description = view.findViewById(R.id.description);
         address = view.findViewById(R.id.address);
         chooseAddress = view.findViewById(R.id.choose_address);
-        addImage = view.findViewById(R.id.addImages);
+        addImage = view.findViewById(R.id.takePhoto);
         submit = view.findViewById(R.id.submit);
+
+        imagePreviewRecView = view.findViewById(R.id.imagePreviewRecView);
+
+        previewAdapter = new CameraPreviewRecyclerAdapter(getContext());
 
         submit.setOnClickListener(this);
 
@@ -126,7 +129,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             case R.id.choose_address:
                 checkLocationPermission();
                 break;
-            case R.id.addImages:
+            case R.id.takePhoto:
                 checkCameraPermissions();
                 break;
             default:
@@ -265,8 +268,11 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 }
                 break;
             case REQUEST_IMAGE_CAPTURE:
-                if (requestCode == Activity.RESULT_OK){
+                if (resultCode == Activity.RESULT_OK){
+                    Log.d(TAG, "onActivityResult: Image capture result ok");
                     addImage(data);
+                }else {
+                    Log.d(TAG, "onActivityResult: Image capture result not ok");
                 }
                 break;
             default:
@@ -275,9 +281,21 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     private void addImage(@Nullable Intent data) {
+        Log.d(TAG, "addImage: Test");
+
         Bundle extras = data.getExtras();
         Bitmap imageBitmap = (Bitmap) extras.get("data");
-//                    imageView.setImageBitmap(imageBitmap);
+
+
+
+        imagePreviewRecView.setAdapter(previewAdapter);
+
+        imagePreviewRecView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+
+        previewAdapter.getImages().add(imageBitmap);
+
+        previewAdapter.notifyDataSetChanged();
+
     }
 
     private void startMap(@Nullable Intent data) {
@@ -292,6 +310,9 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             // display error state to the user
+            Log.d(TAG, "dispatchTakePictureIntent: "+ e);
         }
     }
+
 }
+
