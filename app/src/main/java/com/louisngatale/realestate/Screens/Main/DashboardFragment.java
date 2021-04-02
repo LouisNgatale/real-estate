@@ -35,6 +35,7 @@ import java.util.Objects;
 
 public class DashboardFragment extends Fragment implements AdapterView.OnItemSelectedListener , View.OnClickListener {
 //    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = ;
+    private static final int MAPS_ACTIVITY_REQUEST_CODE = 101;
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
     TextView address;
@@ -138,7 +139,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         } else {
             Toast.makeText(getActivity(), "Request granted", Toast.LENGTH_SHORT).show();
             Intent maps = new Intent(getContext(), Map.class);
-            startActivity(maps);
+            startActivityForResult(maps,MAPS_ACTIVITY_REQUEST_CODE);
         }
 
         /*

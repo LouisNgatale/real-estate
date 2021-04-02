@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Validator {
+
     HashMap<String,String> values = new HashMap<>();
+
     HashMap<String,String> errors = new HashMap<>();
 
     public Validator(HashMap<String,String> values) {
