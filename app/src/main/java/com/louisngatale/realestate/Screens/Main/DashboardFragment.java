@@ -46,7 +46,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         MAPS_ACTIVITY_REQUEST_CODE = 101,
         REQUEST_IMAGE_CAPTURE = 102,
         EXTERNAL_STORAGE_PERMISSION_CODE = 103;
-    ;
+
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
     TextView address;
@@ -75,6 +75,10 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
     }
 
+    /**
+     * @Author: Eng. Louis Ngatale
+     * Initialize widget objects
+     * */
     private void initializeViews(View view) {
         bedRooms = view.findViewById(R.id.bedRooms);
         bathRooms = view.findViewById(R.id.bathRooms);
@@ -241,6 +245,13 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
     }
 
+
+    /**
+     * @param requestCode Request code for Intent
+     * @param resultCode Result code form Intent
+     * @param data Result data from Intent
+     * @Author: Eng. Louis Ngatale
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -255,14 +266,18 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 break;
             case REQUEST_IMAGE_CAPTURE:
                 if (requestCode == Activity.RESULT_OK){
-                    Bundle extras = data.getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-//                    imageView.setImageBitmap(imageBitmap);
+                    addImage(data);
                 }
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + requestCode);
         }
+    }
+
+    private void addImage(@Nullable Intent data) {
+        Bundle extras = data.getExtras();
+        Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                    imageView.setImageBitmap(imageBitmap);
     }
 
     private void startMap(@Nullable Intent data) {
