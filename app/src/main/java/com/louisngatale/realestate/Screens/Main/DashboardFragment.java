@@ -2,6 +2,7 @@ package com.louisngatale.realestate.Screens.Main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,12 +43,12 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     TextView address;
     Button chooseAddress, addImage, submit;
     String bedRoomsValue, bathRoomsValue, houseSizeValue, priceValue, descriptionValue, addressValue,houseTypeValue;
-    HashMap<String,String> errors = new HashMap<>();
     ArrayList<House> house;
-    Boolean addressIsSet = false;
-    private boolean locationPermissionGranted;
+    private boolean locationPermissionGranted, isAddress = false;
+    HashMap<String,String> addressResult;
 
     private static final int LOCATION_PERMISSION_CODE = 100;
+    private final String TAG = "Dashboard";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +63,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         initializeSpinner(view);
 
         initializeViews(view);
+
+        addressResult = new HashMap<>();
 
 //        Add new house after validation
 //        house.add(new House());
@@ -126,8 +130,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     private void getLocationPermission() {
-
-
         if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_DENIED) {
@@ -141,22 +143,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             Intent maps = new Intent(getContext(), Map.class);
             startActivityForResult(maps,MAPS_ACTIVITY_REQUEST_CODE);
         }
-
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        /*if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            Intent maps = new Intent(getContext(), Map.class);
-            startActivity(maps);
-        } else {
-            Toast.makeText(getContext(), "Request denied", Toast.LENGTH_SHORT).show();
-        }*/
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -186,6 +173,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         HashMap<String,String> values = new HashMap<>();
         values.put("Price", price.getText().toString());
         values.put("Description", description.getText().toString());
+        values.put("Address", String.valueOf(isAddress));
 
         Validator validator = new Validator(values);
         HashMap<String, String> formResults = validator.validateForm();
@@ -199,17 +187,29 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 description.setError(formResults.get("Description"));
             }
 
-            if (!addressIsSet){
-                chooseAddress.setError("Choose an address");
+            // TODO: Error dialog
+            if (formResults.containsKey("Address")){
+                Toast.makeText(getContext(), formResults.get("Address"), Toast.LENGTH_SHORT).show();
             }
+
         }else {
 //            TODO: Save the details
         }
-        /*for (Map.Entry<String,String> entry : formResults.entrySet()){
-            System.out.println(entry.getValue());
-        }*/
-
     }
 
-    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == MAPS_ACTIVITY_REQUEST_CODE){
+            if(resultCode == Activity.RESULT_OK){
+                addressResult = (HashMap<String, String>) data.getSerializableExtra("Address");
+                address.setText(addressResult.get("Address"));
+                isAddress = true;
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.louisngatale.realestate.Utils;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -8,6 +10,7 @@ public class Validator {
     HashMap<String,String> values = new HashMap<>();
 
     HashMap<String,String> errors = new HashMap<>();
+    private final String TAG  = "Validator";
 
     public Validator(HashMap<String,String> values) {
         this.values = values;
@@ -16,7 +19,14 @@ public class Validator {
     public HashMap<String,String> validateForm(){
         validatePrice(Objects.requireNonNull(values.get("Price")));
         validateDescription(Objects.requireNonNull(values.get("Description")));
+        validateAddress(values.get("Address"));
         return errors;
+    }
+
+    private void validateAddress(String address) {
+        if (address.equals("false")){
+            errors.put("Address", "Choose address");
+        }
     }
 
     private void validateDescription(String description) {
