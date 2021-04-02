@@ -16,10 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +44,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -54,6 +58,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         PICK_IMAGE = 104;
 
     private ImageView placeholder;
+    String currentPhotoPath;
+
 
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
@@ -129,15 +135,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         spinner.setOnItemSelectedListener(this);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-       houseTypeValue = (String) parent.getItemAtPosition(position);
-    }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        houseTypeValue = String.valueOf(parent.getItemAtPosition(0));
-    }
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -167,13 +165,14 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         startActivityForResult(Intent.createChooser(galleryIntent,"SELECT IMAGE"),PICK_IMAGE);
     }
 
+
+    @SuppressLint("QueryPermissionsNeeded")
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             // display error state to the user
-            Log.d(TAG, "dispatchTakePictureIntent: "+ e);
         }
     }
 
@@ -185,12 +184,9 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             placeholder.setVisibility(View.GONE);
         }
 */
-
         switch (type) {
             case "Camera":
                 Uri imageUri = data.getData();
-
-                Log.d(TAG, "addImage: " + imageUri);
 
                 Bundle extras = Objects.requireNonNull(data).getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -203,9 +199,9 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 break;
             case "Picker":
                 Uri selectedImg = data.getData();
-                Log.d(TAG, "addImage: " + selectedImg);
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(Objects.requireNonNull(getContext()).getContentResolver(),selectedImg);
+                    Uri test = MediaStore.Images.Media.getContentUri(String.valueOf(selectedImg));
                     if (bitmap!= null) {
                         previewAdapter.getImages().add(bitmap);
                         previewAdapter.notifyDataSetChanged();
@@ -221,6 +217,23 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     }
 
 
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        @SuppressLint("SimpleDateFormat")
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Objects.requireNonNull(getActivity()).getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
 
     /**
     * Validate form fields after the user has pressed
@@ -387,6 +400,17 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 }
                 break;
         }
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        houseTypeValue = (String) parent.getItemAtPosition(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        houseTypeValue = String.valueOf(parent.getItemAtPosition(0));
     }
 
 }
