@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -27,12 +28,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.louisngatale.realestate.R;
-import com.louisngatale.realestate.RecyclerViews.CameraPreviewRecyclerAdapter;
+import com.louisngatale.realestate.RecyclerViews.PicturePreviewRecyclerAdapter;
 import com.louisngatale.realestate.Screens.Map;
 import com.louisngatale.realestate.Utils.Validator;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -49,6 +51,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         EXTERNAL_STORAGE_PERMISSION_CODE = 103,
         PICK_IMAGE = 104;
 
+    private ImageView placeholder;
+
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
     TextView address;
@@ -58,7 +62,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     HashMap<String,String> addressResult;
     RecyclerView imagePreviewRecView;
     private final String TAG = "Dashboard";
-    CameraPreviewRecyclerAdapter previewAdapter;
+    PicturePreviewRecyclerAdapter previewAdapter;
     private String realPath;
 
     @Override
@@ -94,10 +98,11 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         takePhoto = view.findViewById(R.id.takePhoto);
         submit = view.findViewById(R.id.submit);
         addImages = view.findViewById(R.id.addImages);
+        placeholder = view.findViewById(R.id.empty_image);
 
         imagePreviewRecView = view.findViewById(R.id.imagePreviewRecView);
 
-        previewAdapter = new CameraPreviewRecyclerAdapter(getContext());
+        previewAdapter = new PicturePreviewRecyclerAdapter(getContext());
 
         imagePreviewRecView.setAdapter(previewAdapter);
 
@@ -110,6 +115,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         takePhoto.setOnClickListener(this);
 
         chooseAddress.setOnClickListener(this);
+
     }
 
     private void initializeSpinner(@NonNull View view) {
@@ -171,6 +177,13 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
     private void addImage(@Nullable Intent data, String type) {
 
+//        TODO: Toggle empty image placeholder
+/*
+        if (previewAdapter.getItemCount() > 0){
+            placeholder.setVisibility(View.GONE);
+        }
+*/
+
         switch (type) {
             case "Camera":
                 Bundle extras = data.getExtras();
@@ -198,8 +211,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         }
 
     }
-
-
 
     /**
     * Validate form fields after the user has pressed
@@ -234,7 +245,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         } //            TODO: Save the details
 
     }
-
 
     /**
      * @param requestCode Request code for Intent
@@ -288,7 +298,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
-
     private void startMap(@Nullable Intent data) {
         addressResult = (HashMap<String, String>) data.getSerializableExtra("Address");
         address.setText(addressResult.get("Address"));
@@ -315,7 +324,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
-
     /**
      * Check camera permissions
      * @Author: Eng. Louis Ngatale
@@ -333,7 +341,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             dispatchTakePictureIntent();
         }
     }
-
 
     /**
      * Request permission to access different features
@@ -371,8 +378,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 break;
         }
     }
-
-
 
 }
 
