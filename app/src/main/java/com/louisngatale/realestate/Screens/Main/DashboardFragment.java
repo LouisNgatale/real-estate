@@ -3,8 +3,10 @@ package com.louisngatale.realestate.Screens.Main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,15 +42,15 @@ import java.util.Objects;
 
 public class DashboardFragment extends Fragment implements AdapterView.OnItemSelectedListener , View.OnClickListener {
 //    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = ;
-    private static final int MAPS_ACTIVITY_REQUEST_CODE = 101;
+    private static final int MAPS_ACTIVITY_REQUEST_CODE = 101,REQUEST_IMAGE_CAPTURE = 102;
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
     TextView address;
     Button chooseAddress, addImage, submit;
     String bedRoomsValue, bathRoomsValue, houseSizeValue, priceValue, descriptionValue, addressValue,houseTypeValue;
-    ArrayList<House> house;
     private boolean locationPermissionGranted, isAddress = false;
     HashMap<String,String> addressResult;
+    RecyclerView imagePreviewRecView;
 
     private static final int LOCATION_PERMISSION_CODE = 100;
     private final String TAG = "Dashboard";
@@ -65,12 +70,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         initializeViews(view);
 
         addressResult = new HashMap<>();
-
-//        Add new house after validation
-//        house.add(new House());
-
-//        HouseUtils.getInstance();
-//        HouseUtils.setHouses(house);
 
     }
 
@@ -122,7 +121,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 getLocationPermission();
                 break;
             case R.id.addImages:
-                Toast.makeText(getContext(), "Add Images", Toast.LENGTH_SHORT).show();
+                dispatchTakePictureIntent();
                 break;
             default:
                 break;
@@ -201,15 +200,33 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == MAPS_ACTIVITY_REQUEST_CODE){
-            if(resultCode == Activity.RESULT_OK){
-                addressResult = (HashMap<String, String>) data.getSerializableExtra("Address");
-                address.setText(addressResult.get("Address"));
-                isAddress = true;
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
+        switch (requestCode) {
+            case MAPS_ACTIVITY_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    addressResult = (HashMap<String, String>) data.getSerializableExtra("Address");
+                    address.setText(addressResult.get("Address"));
+                    isAddress = true;
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    //Write your code if there's no result
+                    Toast.makeText(getContext(), "Couldn't get address", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_IMAGE_CAPTURE:
+                if (requestCode == Activity.RESULT_OK){
+                    Bundle extras = data.getExtras();
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                    imageView.setImageBitmap(imageBitmap);
+                }
+                break;
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            // display error state to the user
         }
     }
 }
