@@ -29,6 +29,7 @@ android {
 }
 
 dependencies {
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.gms:play-services-location:18.0.0'

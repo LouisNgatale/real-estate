@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,9 @@ import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.RecyclerViews.CameraPreviewRecyclerAdapter;
 import com.louisngatale.realestate.Screens.Map;
 import com.louisngatale.realestate.Utils.Validator;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -43,7 +46,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     private static final int LOCATION_PERMISSION_CODE = 100,
         MAPS_ACTIVITY_REQUEST_CODE = 101,
         REQUEST_IMAGE_CAPTURE = 102,
-        EXTERNAL_STORAGE_PERMISSION_CODE = 103;
+        EXTERNAL_STORAGE_PERMISSION_CODE = 103,
+        PICK_IMAGE = 104;
 
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
@@ -55,6 +59,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     RecyclerView imagePreviewRecView;
     private final String TAG = "Dashboard";
     CameraPreviewRecyclerAdapter previewAdapter;
+    private String realPath;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,8 +99,13 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
         previewAdapter = new CameraPreviewRecyclerAdapter(getContext());
 
+        imagePreviewRecView.setAdapter(previewAdapter);
+
+        imagePreviewRecView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+
         submit.setOnClickListener(this);
 
+        addImages.setOnClickListener(this);
 
         takePhoto.setOnClickListener(this);
 
@@ -134,91 +144,66 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             case R.id.takePhoto:
                 checkCameraPermissions();
                 break;
+            case R.id.addImages:
+                addImages();
+                break;
             default:
                 break;
         }
     }
 
-    /**
-     * Check camera permissions
-     * @Author: Eng. Louis Ngatale
-     */
-    private void checkCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_DENIED) {
-            // Request permission
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    EXTERNAL_STORAGE_PERMISSION_CODE);
+    private void addImages() {
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        galleryIntent.setType("image/*");
 
-        } else {
-            dispatchTakePictureIntent();
+        startActivityForResult(Intent.createChooser(galleryIntent,"SELECT IMAGE"),PICK_IMAGE);
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            // display error state to the user
+            Log.d(TAG, "dispatchTakePictureIntent: "+ e);
         }
     }
 
+    private void addImage(@Nullable Intent data, String type) {
 
-    /**
-     * Check location permissions
-     * @Author: Eng. Louis Ngatale
-     */
-    private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_DENIED) {
-            // Request permission
-            ActivityCompat.requestPermissions(getActivity(),
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                LOCATION_PERMISSION_CODE);
+        switch (type) {
+            case "Camera":
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-        } else {
-            Toast.makeText(getActivity(), "Request granted", Toast.LENGTH_SHORT).show();
-            Intent maps = new Intent(getContext(), Map.class);
-            startActivityForResult(maps,MAPS_ACTIVITY_REQUEST_CODE);
-        }
-    }
 
-    /**
-    * Request permission to access different features
-    * @Author: Eng. Louis Ngatale
-    * **/
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                previewAdapter.getImages().add(imageBitmap);
 
-        switch (requestCode) {
-            case LOCATION_PERMISSION_CODE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getContext(),
-                            "Permission Granted",
-                            Toast.LENGTH_SHORT)
-                            .show();
-                } else {
-                    Toast.makeText(getContext(),
-                            "Permission Denied",
-                            Toast.LENGTH_SHORT)
-                            .show();
+                previewAdapter.notifyDataSetChanged();
+                break;
+            case "Picker":
+                Uri selectedImg = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(Objects.requireNonNull(getContext()).getContentResolver(),selectedImg);
+                    if (bitmap!= null) {
+                        previewAdapter.getImages().add(bitmap);
+                        previewAdapter.notifyDataSetChanged();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 break;
-            case EXTERNAL_STORAGE_PERMISSION_CODE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    dispatchTakePictureIntent();
-                } else {
-                    Toast.makeText(getContext(),
-                            "Permission Denied",
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
-                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
         }
+
     }
 
-    
+
+
     /**
-    * Validate form fields after the user has pressed 
-    * the submit function. Call Validator class's validate 
+    * Validate form fields after the user has pressed
+    * the submit function. Call Validator class's validate
     * function and pass the values through Hash Map
     * @Author: Eng. Louis Ngatale
     * **/
@@ -272,33 +257,37 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             case REQUEST_IMAGE_CAPTURE:
                 if (resultCode == Activity.RESULT_OK){
                     Log.d(TAG, "onActivityResult: Image capture result ok");
-                    addImage(data);
+                    addImage(data,"Camera");
                 }else {
                     Log.d(TAG, "onActivityResult: Image capture result not ok");
                 }
+                break;
+            case PICK_IMAGE:
+                if (resultCode == Activity.RESULT_OK){
+                    addImage(data, "Picker");
+                }else {
+                    Log.d(TAG, "onActivityResult: Image chooser result not ok");
+                }
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+//                cropImage(resultCode, data);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + requestCode);
         }
     }
 
-    private void addImage(@Nullable Intent data) {
-        Log.d(TAG, "addImage: Test");
+    private void cropImage(int resultCode, @Nullable Intent data) {
+        CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-        Bundle extras = data.getExtras();
-        Bitmap imageBitmap = (Bitmap) extras.get("data");
-
-
-
-        imagePreviewRecView.setAdapter(previewAdapter);
-
-        imagePreviewRecView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-
-        previewAdapter.getImages().add(imageBitmap);
-
-        previewAdapter.notifyDataSetChanged();
-
+        if (resultCode == Activity.RESULT_OK){
+            Uri resultUri = result.getUri();
+            Log.d(TAG, "cropImage: "+ resultUri);
+        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+            Exception error = result.getError();
+            Log.d(TAG, "cropImage: "+ error);
+        }
     }
+
 
     private void startMap(@Nullable Intent data) {
         addressResult = (HashMap<String, String>) data.getSerializableExtra("Address");
@@ -306,15 +295,84 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         isAddress = true;
     }
 
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            // display error state to the user
-            Log.d(TAG, "dispatchTakePictureIntent: "+ e);
+    /**
+     * Check location permissions
+     * @Author: Eng. Louis Ngatale
+     */
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_DENIED) {
+            // Request permission
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_CODE);
+
+        } else {
+            Toast.makeText(getActivity(), "Request granted", Toast.LENGTH_SHORT).show();
+            Intent maps = new Intent(getContext(), Map.class);
+            startActivityForResult(maps,MAPS_ACTIVITY_REQUEST_CODE);
         }
     }
+
+
+    /**
+     * Check camera permissions
+     * @Author: Eng. Louis Ngatale
+     */
+    private void checkCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(this.getContext()),
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED) {
+            // Request permission
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    EXTERNAL_STORAGE_PERMISSION_CODE);
+
+        } else {
+            dispatchTakePictureIntent();
+        }
+    }
+
+
+    /**
+     * Request permission to access different features
+     * @Author: Eng. Louis Ngatale
+     * **/
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case LOCATION_PERMISSION_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(),
+                            "Permission Granted",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Toast.makeText(getContext(),
+                            "Permission Denied",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            case EXTERNAL_STORAGE_PERMISSION_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dispatchTakePictureIntent();
+                } else {
+                    Toast.makeText(getContext(),
+                            "Permission Denied",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+        }
+    }
+
+
 
 }
 
