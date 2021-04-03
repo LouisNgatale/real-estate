@@ -41,6 +41,7 @@ import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.RecyclerViews.PicturePreviewRecyclerAdapter;
 import com.louisngatale.realestate.Screens.Map;
+import com.louisngatale.realestate.Services.Firestorage;
 import com.louisngatale.realestate.Services.Firestore;
 import com.louisngatale.realestate.Utils.Validator;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -290,9 +291,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
         } else {
 //            Extract values
-
             ArrayList<String> images = new ArrayList<>();
-
             bedRoomsValue = bedRooms.getText().toString();
             bathRoomsValue = bathRooms.getText().toString();
             houseSizeValue = houseSize.getText().toString();
@@ -305,15 +304,22 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                             image -> images.add(String.valueOf(image
                             )));
 
+            //            Upload images first
+            Firestorage firestorage = new Firestorage();
+
+            ArrayList<String> downloadUri;
+            downloadUri = firestorage.uploadImages(images);
+
             HashMap<String, Object> map = new HashMap<>();
             map.put("address", addressValue);
             map.put("agentAuthority", "Owner");
             map.put("agentName", "John Doe");
             map.put("houseDescription", descriptionValue);
-            map.put("houseImages", images);
+            map.put("houseImages", downloadUri);
             map.put("housePrice", priceValue.toString());
             map.put("houseType", houseTypeValue);
 
+//            Store house details
             Firestore firestore = new Firestore();
             firestore.addHouse(map);
         }
