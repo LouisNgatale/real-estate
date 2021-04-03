@@ -1,63 +1,82 @@
 package com.louisngatale.realestate.Models;
 
+import java.util.ArrayList;
 
 public class House {
 
-    private String house_name;
-    private int house_image;
-    private Integer house_price;
-    private String house_description;
+    private String houseType;
+    private ArrayList<String> houseImages;
+    private Integer housePrice;
+    private String houseDescription;
     private String address;
+    private String agentName;
+    private String agentAuthority;
     private boolean saved = false;
 
-    public House(String house_name, int house_image, int house_price, String house_description,String address) {
-        this.house_name = house_name;
-        this.house_image = house_image;
-        this.house_price = house_price;
-        this.house_description = house_description;
+    public House(String houseType, ArrayList<String> houseImages, Integer housePrice, String houseDescription, String address, String agentName, String agentAuthority) {
+        this.houseType = houseType;
+        this.houseImages = houseImages;
+        this.housePrice = housePrice;
+        this.houseDescription = houseDescription;
+        this.address = address;
+        this.agentName = agentName;
+        this.agentAuthority = agentAuthority;
+    }
+
+    public String getHouseType() {
+        return houseType;
+    }
+
+    public void setHouseType(String houseType) {
+        this.houseType = houseType;
+    }
+
+    public ArrayList<String> getHouseImages() {
+        return houseImages;
+    }
+
+    public void setHouseImages(ArrayList<String> houseImages) {
+        this.houseImages = houseImages;
+    }
+
+    public Integer getHousePrice() {
+        return housePrice;
+    }
+
+    public void setHousePrice(Integer housePrice) {
+        this.housePrice = housePrice;
+    }
+
+    public String getHouseDescription() {
+        return houseDescription;
+    }
+
+    public void setHouseDescription(String houseDescription) {
+        this.houseDescription = houseDescription;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public House(String house_name, int house_price, String house_description, String address) {
-        this.house_name = house_name;
-        this.house_price = house_price;
-        this.house_description = house_description;
-        this.address = address;
+    public String getAgentName() {
+        return agentName;
     }
 
-    public House() {
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 
-    public String getHouse_name() {
-        return house_name;
+    public String getAgentAuthority() {
+        return agentAuthority;
     }
 
-    public void setHouse_name(String house_name) {
-        this.house_name = house_name;
-    }
-
-    public int getHouse_image() {
-        return house_image;
-    }
-
-    public void setHouse_image(int house_image) {
-        this.house_image = house_image;
-    }
-
-    public String getHouse_price() {
-        return house_price.toString();
-    }
-
-    public void setHouse_price(int house_price) {
-        this.house_price = house_price;
-    }
-
-    public String getHouse_description() {
-        return house_description;
-    }
-
-    public void setHouse_description(String house_description) {
-        this.house_description = house_description;
+    public void setAgentAuthority(String agentAuthority) {
+        this.agentAuthority = agentAuthority;
     }
 
     public boolean isSaved() {
@@ -68,15 +87,4 @@ public class House {
         this.saved = saved;
     }
 
-    public void setHouse_price(Integer house_price) {
-        this.house_price = house_price;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 }
