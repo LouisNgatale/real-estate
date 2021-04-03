@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -42,6 +43,7 @@ import com.louisngatale.realestate.Screens.Map;
 import com.louisngatale.realestate.Utils.Validator;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -158,6 +160,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
+
+
     private void addImages() {
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
@@ -186,12 +190,14 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 */
         switch (type) {
             case "Camera":
-                Uri imageUri = data.getData();
 
                 Bundle extras = Objects.requireNonNull(data).getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-                previewAdapter.getImages().add(imageBitmap);
+                // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                Uri imageUri = getImageUri(getContext().getApplicationContext(), imageBitmap);
+
+                previewAdapter.getImages().add(imageUri);
 
                 previewAdapter.notifyDataSetChanged();
 
@@ -203,7 +209,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(Objects.requireNonNull(getContext()).getContentResolver(),selectedImg);
                     Uri test = MediaStore.Images.Media.getContentUri(String.valueOf(selectedImg));
                     if (bitmap!= null) {
-                        previewAdapter.getImages().add(bitmap);
+                        previewAdapter.getImages().add(selectedImg);
                         previewAdapter.notifyDataSetChanged();
                     }
                 } catch (IOException e) {
@@ -213,9 +219,28 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
         }
-
     }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        String path = "";
+        if (getContext().getContentResolver() != null) {
+            Cursor cursor = getContext().getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                path = cursor.getString(idx);
+                cursor.close();
+            }
+        }
+        return path;
+    }
 
 
     private File createImageFile() throws IOException {

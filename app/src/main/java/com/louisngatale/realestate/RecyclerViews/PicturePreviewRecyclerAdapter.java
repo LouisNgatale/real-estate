@@ -3,6 +3,7 @@ package com.louisngatale.realestate.RecyclerViews;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 public class PicturePreviewRecyclerAdapter extends RecyclerView.Adapter<PicturePreviewRecyclerAdapter.ViewHolder> {
 
-    ArrayList<Bitmap> images = new ArrayList<>();
+    ArrayList<Uri> images = new ArrayList<>();
     Context mContext;
 
     public PicturePreviewRecyclerAdapter(Context mContext) {
@@ -34,7 +35,7 @@ public class PicturePreviewRecyclerAdapter extends RecyclerView.Adapter<PictureP
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.preview.setImageBitmap(images.get(position));
+        holder.preview.setImageURI(images.get(position));
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,11 +61,11 @@ public class PicturePreviewRecyclerAdapter extends RecyclerView.Adapter<PictureP
         }
     }
 
-    public ArrayList<Bitmap> getImages() {
+    public ArrayList<Uri> getImages() {
         return images;
     }
 
-    public void setImages(ArrayList<Bitmap> images) {
+    public void setImages(ArrayList<Uri> images) {
         this.images = images;
     }
 
