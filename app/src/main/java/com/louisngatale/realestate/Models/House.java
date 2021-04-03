@@ -13,7 +13,7 @@ public class House {
     private String agentAuthority;
     private boolean saved = false;
 
-    public House(String houseType, ArrayList<String> houseImages, Integer housePrice, String houseDescription, String address, String agentName, String agentAuthority) {
+    public House(String houseType, ArrayList<String> houseImages, int housePrice, String houseDescription, String address, String agentName, String agentAuthority) {
         this.houseType = houseType;
         this.houseImages = houseImages;
         this.housePrice = housePrice;

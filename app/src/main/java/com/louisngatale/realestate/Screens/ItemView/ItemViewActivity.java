@@ -54,9 +54,9 @@ public class ItemViewActivity extends AppCompatActivity {
 
     private void setLayout(House incomingHouse) {
         initiateViews();
-        house_image.setImageResource(incomingHouse.getHouse_image());
+       /* house_image.setImageResource(incomingHouse.getHouse_image());
         house_price.setText(incomingHouse.getHouse_price());
-        house_description.setText(incomingHouse.getHouse_description());
+        house_description.setText(incomingHouse.getHouse_description());*/
     }
 
     private void initiateViews() {

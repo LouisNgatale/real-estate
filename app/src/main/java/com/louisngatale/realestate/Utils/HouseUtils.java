@@ -28,21 +28,9 @@ public class HouseUtils{
     }
 
     private void initBrowseHouse() {
-        browse_houses.add(new House("First House",R.drawable.house_1,20000,"This is my first house","Dodoma"));
-        browse_houses.add(new House("Second House",R.drawable.house_2,234422,"This is my second house","Dodoma"));
-        browse_houses.add(new House("Third House",R.drawable.house_3,234214,"This is my third house","Dodoma"));
-        browse_houses.add(new House("Fourth House",R.drawable.house_5,43214214,"This is my fourth house","Dodoma"));
-        browse_houses.add(new House("Fourth House",R.drawable.house_6,43214214,"This is my fourth house","Dodoma"));
-        browse_houses.add(new House("Fourth House",R.drawable.house_8,43214214,"This is my fourth house","Dodoma"));
-        browse_houses.add(new House("Fourth House",R.drawable.house_9,43214214,"This is my fourth house","Dodoma"));
     }
 
     private void initHouse() {
-//        TODO: Initiate data call
-        houses.add(new House("First House", R.drawable.house_1,20000,"This is my first house","Dodoma"));
-        houses.add(new House("Second House",R.drawable.house_6,20000,"This is my second house","Dodoma"));
-        houses.add(new House("Third House",R.drawable.house_8,20000,"This is my third house","Dodoma"));
-        houses.add(new House("Fourth House",R.drawable.house_2,20000,"This is my fourth house","Dodoma"));
     }
 
     public static HouseUtils getInstance() {

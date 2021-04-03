@@ -37,9 +37,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.RecyclerViews.PicturePreviewRecyclerAdapter;
 import com.louisngatale.realestate.Screens.Map;
+import com.louisngatale.realestate.Services.Firestore;
 import com.louisngatale.realestate.Utils.Validator;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -47,6 +49,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
@@ -67,7 +70,13 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     EditText bedRooms, bathRooms, houseSize, price, description;
     TextView address;
     Button chooseAddress, takePhoto, submit,addImages;
-    String bedRoomsValue, bathRoomsValue, houseSizeValue, priceValue, descriptionValue, addressValue,houseTypeValue;
+    String bedRoomsValue;
+    String bathRoomsValue;
+    String houseSizeValue;
+    Integer priceValue;
+    String descriptionValue;
+    String addressValue;
+    String houseTypeValue;
     private boolean locationPermissionGranted, isAddress = false;
     HashMap<String,String> addressResult;
     RecyclerView imagePreviewRecView;
@@ -137,8 +146,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         spinner.setOnItemSelectedListener(this);
     }
 
-
-
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
@@ -160,8 +167,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
-
-
     private void addImages() {
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
@@ -181,13 +186,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     private void addImage(@Nullable Intent data, String type) {
-
 //        TODO: Toggle empty image placeholder
-/*
-        if (previewAdapter.getItemCount() > 0){
-            placeholder.setVisibility(View.GONE);
-        }
-*/
         switch (type) {
             case "Camera":
 
@@ -242,7 +241,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         return path;
     }
 
-
     private File createImageFile() throws IOException {
         // Create an image file name
         @SuppressLint("SimpleDateFormat")
@@ -290,7 +288,35 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 Toast.makeText(getContext(), formResults.get("Address"), Toast.LENGTH_SHORT).show();
             }
 
-        } //            TODO: Save the details
+        } else {
+//            Extract values
+
+            ArrayList<String> images = new ArrayList<>();
+
+            bedRoomsValue = bedRooms.getText().toString();
+            bathRoomsValue = bathRooms.getText().toString();
+            houseSizeValue = houseSize.getText().toString();
+            priceValue = Integer.valueOf(price.getText().toString());
+            descriptionValue = description.getText().toString();
+            addressValue = address.getText().toString();
+
+            previewAdapter.getImages()
+                    .forEach(
+                            image -> images.add(String.valueOf(image
+                            )));
+
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("address", addressValue);
+            map.put("agentAuthority", "Owner");
+            map.put("agentName", "John Doe");
+            map.put("houseDescription", descriptionValue);
+            map.put("houseImages", images);
+            map.put("housePrice", priceValue.toString());
+            map.put("houseType", houseTypeValue);
+
+            Firestore firestore = new Firestore();
+            firestore.addHouse(map);
+        }
 
     }
 

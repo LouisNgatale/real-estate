@@ -34,7 +34,7 @@ public class WishListRecyclerViewAdapter extends RecyclerView.Adapter<WishListRe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.house_image.setImageResource(houses.get(position).getHouse_image());
+        /*holder.house_image.setImageResource(houses.get(position).getHouse_image());
         holder.house_name.setText(houses.get(position).getHouse_name());
         holder.house_price.setText(houses.get(position).getHouse_price());
         holder.house_description.setText(houses.get(position).getHouse_description());
@@ -48,7 +48,7 @@ public class WishListRecyclerViewAdapter extends RecyclerView.Adapter<WishListRe
                 itemView.putExtra("id", position);
                 mContext.startActivity(itemView);
             }
-        });
+        });*/
     }
 
     @Override

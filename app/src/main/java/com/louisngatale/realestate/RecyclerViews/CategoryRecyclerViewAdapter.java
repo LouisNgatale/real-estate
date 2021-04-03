@@ -42,10 +42,10 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
     @Override
     public void onBindViewHolder(@NonNull CategoryRecyclerViewAdapter.ViewHolder holder, int position) {
-        holder.house_name.setText(house.get(position).getHouse_name());
+ /*       holder.house_name.setText(house.get(position).getHouse_name());
         holder.house_description.setText(house.get(position).getHouse_description());
         holder.house_price.setText(house.get(position).getHouse_price());
-        holder.house_image.setImageResource(house.get(position).getHouse_image());
+        holder.house_image.setImageResource(house.get(position).getHouse_image());*/
     }
 
     @Override

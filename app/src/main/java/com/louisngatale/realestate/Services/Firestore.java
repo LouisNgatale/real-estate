@@ -12,7 +12,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.louisngatale.realestate.Screens.Map;
+
+import java.util.HashMap;
 
 public class Firestore {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -20,7 +21,7 @@ public class Firestore {
 
 
     //    Add new house
-    public void addHouse(Map house){
+    public void addHouse(HashMap<String, Object> house){
         db.collection("houses")
                 .add(house)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -35,7 +36,6 @@ public class Firestore {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
-
     }
 
 
