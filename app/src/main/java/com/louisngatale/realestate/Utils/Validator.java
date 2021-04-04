@@ -19,7 +19,7 @@ public class Validator {
     public HashMap<String,String> validateForm(){
         validatePrice(Objects.requireNonNull(values.get("Price")));
         validateDescription(Objects.requireNonNull(values.get("Description")));
-//        validateAddress(values.get("Address"));
+        validateAddress(values.get("Address"));
         return errors;
     }
 

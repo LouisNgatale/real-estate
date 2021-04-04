@@ -1,26 +1,43 @@
+/*
 package com.louisngatale.realestate.RecyclerViews;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.louisngatale.realestate.Models.House;
-import com.louisngatale.realestate.R;
-import com.louisngatale.realestate.Screens.ItemView.ItemViewActivity;
 
-import java.util.ArrayList;
+public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, HouseHolder> {
 
-public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecyclerViewAdapter.ViewHolder> {
+    */
+/**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     *//*
 
-    ArrayList<House> house = new ArrayList<>();
+    public BrowseRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<House> options) {
+        super(options);
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull HouseHolder holder, int position, @NonNull House model) {
+
+
+    }
+
+    @NonNull
+    @Override
+    public HouseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return null;
+    }
+
+
+   */
+/* ArrayList<House> house = new ArrayList<>();
     private Context mContext;
 
     public BrowseRecyclerViewAdapter(Context mContext) {
@@ -36,7 +53,9 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-       /* holder.house_name.setText(house.get(position).getHouse_name());
+       *//*
+*/
+/* holder.house_name.setText(house.get(position).getHouse_name());
         holder.house_description.setText(house.get(position).getHouse_description());
         holder.house_price.setText(house.get(position).getHouse_price());
         holder.house_image.setImageResource(house.get(position).getHouse_image());
@@ -46,7 +65,6 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
         } else {
             holder.wishlist.setImageResource(R.drawable.tab_saved_white);
         }
-
 
 //        TODO: Global click listener function
 //        TODO: Add item to wish list
@@ -73,7 +91,9 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
                 itemView.putExtra("id", position);
                 mContext.startActivity(itemView);
             }
-        });*/
+        });*//*
+*/
+/*
 
     }
 
@@ -97,5 +117,7 @@ public class BrowseRecyclerViewAdapter extends RecyclerView.Adapter<BrowseRecycl
 
     public void setHouse(ArrayList<House> house) {
         this.house = house;
-    }
+    }*//*
+
 }
+*/

@@ -291,9 +291,9 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             }
 
             // TODO: Error dialog
-//            if (formResults.containsKey("Address")){
-//                Toast.makeText(getContext(), formResults.get("Address"), Toast.LENGTH_SHORT).show();
-//            }
+            if (formResults.containsKey("Address")){
+                Toast.makeText(getContext(), formResults.get("Address"), Toast.LENGTH_SHORT).show();
+            }
 
         } else {
 //            Extract values

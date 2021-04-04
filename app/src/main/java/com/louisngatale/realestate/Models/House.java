@@ -6,14 +6,17 @@ public class House {
 
     private String houseType;
     private ArrayList<String> houseImages;
-    private Integer housePrice;
+    private String housePrice;
     private String houseDescription;
     private String address;
     private String agentName;
     private String agentAuthority;
     private boolean saved = false;
 
-    public House(String houseType, ArrayList<String> houseImages, int housePrice, String houseDescription, String address, String agentName, String agentAuthority) {
+    public House() {
+    }
+
+    public House(String houseType, ArrayList<String> houseImages, String  housePrice, String houseDescription, String address, String agentName, String agentAuthority) {
         this.houseType = houseType;
         this.houseImages = houseImages;
         this.housePrice = housePrice;
@@ -39,11 +42,11 @@ public class House {
         this.houseImages = houseImages;
     }
 
-    public Integer getHousePrice() {
+    public String getHousePrice() {
         return housePrice;
     }
 
-    public void setHousePrice(Integer housePrice) {
+    public void setHousePrice(String housePrice) {
         this.housePrice = housePrice;
     }
 
