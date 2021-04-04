@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.louisngatale.realestate.Models.House;
+import com.louisngatale.realestate.OnUploadEventListener;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.RecyclerViews.PicturePreviewRecyclerAdapter;
 import com.louisngatale.realestate.Screens.Map;
@@ -152,7 +153,11 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.submit:
-                validateForm();
+                try {
+                    validateForm();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.choose_address:
                 checkLocationPermission();
@@ -191,8 +196,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         switch (type) {
             case "Camera":
 
-                Bundle extras = Objects.requireNonNull(data).getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                Bundle extras = Objects.requireNonNull(data).getExtras();
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
 
                 // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
                 Uri imageUri = getImageUri(getContext().getApplicationContext(), imageBitmap);
@@ -221,6 +226,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
+//    TODO:Handle camera intent error
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -265,7 +271,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     * function and pass the values through Hash Map
     * @Author: Eng. Louis Ngatale
     * **/
-    public void validateForm(){
+    public void validateForm() throws InterruptedException {
 //        Validate price
         HashMap<String,String> values = new HashMap<>();
         values.put("Price", price.getText().toString());
@@ -285,9 +291,9 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             }
 
             // TODO: Error dialog
-            if (formResults.containsKey("Address")){
-                Toast.makeText(getContext(), formResults.get("Address"), Toast.LENGTH_SHORT).show();
-            }
+//            if (formResults.containsKey("Address")){
+//                Toast.makeText(getContext(), formResults.get("Address"), Toast.LENGTH_SHORT).show();
+//            }
 
         } else {
 //            Extract values
@@ -297,31 +303,27 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             houseSizeValue = houseSize.getText().toString();
             priceValue = Integer.valueOf(price.getText().toString());
             descriptionValue = description.getText().toString();
-            addressValue = address.getText().toString();
+//            addressValue = address.getText().toString();
 
             previewAdapter.getImages()
-                    .forEach(
-                            image -> images.add(String.valueOf(image
-                            )));
+                          .forEach(image -> images.add(String.valueOf(image)));
 
-            //            Upload images first
-            Firestorage firestorage = new Firestorage();
-
-            ArrayList<String> downloadUri;
-            downloadUri = firestorage.uploadImages(images);
+            ArrayList<String> emptyImages = new ArrayList<>();
 
             HashMap<String, Object> map = new HashMap<>();
-            map.put("address", addressValue);
-            map.put("agentAuthority", "Owner");
-            map.put("agentName", "John Doe");
-            map.put("houseDescription", descriptionValue);
-            map.put("houseImages", downloadUri);
-            map.put("housePrice", priceValue.toString());
-            map.put("houseType", houseTypeValue);
+                map.put("address", addressValue);
+                map.put("agentAuthority", "Owner");
+                map.put("agentName", "John Doe");
+                map.put("houseDescription", descriptionValue);
+                map.put("houseImages", emptyImages);
+                map.put("housePrice", priceValue.toString());
+                map.put("houseType", houseTypeValue);
 
-//            Store house details
             Firestore firestore = new Firestore();
-            firestore.addHouse(map);
+            String documentId = firestore.addHouse(map,images);
+
+
+
         }
 
     }

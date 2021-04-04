@@ -13,21 +13,26 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Firestore {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final String TAG = "Firestore";
-
+    private final String TAG = "Firestorage";
+    String documentId;
 
     //    Add new house
-    public void addHouse(HashMap<String, Object> house){
+    public String addHouse(HashMap<String, Object> house, ArrayList<String> images){
+        Firestorage firestorage = new Firestorage();
         db.collection("houses")
                 .add(house)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        documentId = documentReference.getId();
+                        // Upload images first
+                        firestorage.uploadImages(images, documentId);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -36,6 +41,7 @@ public class Firestore {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
+        return documentId;
     }
 
 
