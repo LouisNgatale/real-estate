@@ -9,17 +9,23 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.louisngatale.realestate.Models.House;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Firestore {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final String TAG = "Firestorage";
+    private final String TAG = "Items";
     String documentId;
+    House house;
+    DocumentReference docRef;
+
 
     //    Add new house
     public String addHouse(HashMap<String, Object> house, ArrayList<String> images){
@@ -46,24 +52,20 @@ public class Firestore {
 
 
 //    Get all houses
-
+    public Query getAllHouses(){
+        return db
+                .collection("houses");
+    }
 
 
 //    Get one house
-    public void getHouse(){
-        db.collection("houses")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+    public House getHouse(String house_index){
+        docRef = db.collection("houses").document(house_index);
+
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            this.house = documentSnapshot.toObject(House.class);
+            Log.d(TAG, "getHouse: " + this.house);
+        });
+        return this.house;
     }
 }

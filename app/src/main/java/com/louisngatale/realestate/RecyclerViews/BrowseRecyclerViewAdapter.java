@@ -1,5 +1,7 @@
 package com.louisngatale.realestate.RecyclerViews;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,22 +14,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
-import com.louisngatale.realestate.Screens.Main.HomeFragment;
+import com.louisngatale.realestate.Screens.ItemView.ItemViewActivity;
 
 public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, BrowseRecyclerViewAdapter.ViewHolder> {
 
+    private OnItemClickListener listener;
+
     private final String TAG="Home";
+    Context mContext;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
      * @param options
+     * @param context
      */
-    public BrowseRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<House> options) {
+    public BrowseRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<House> options, Context context) {
         super(options);
+        this.mContext = context;
     }
 
     @Override
@@ -35,9 +43,8 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, B
         holder.house_description.setText(model.getHouseDescription());
         holder.house_name.setText(model.getHouseType());
         holder.house_price.setText(model.getHousePrice());
-        Log.d(TAG, "onBindViewHolder: " + model.getHouseType());
-        Log.d(TAG, "onBindViewHolder: " + model.getHousePrice());
-        Log.d(TAG, "onBindViewHolder: " + model.getHouseImages());
+        Log.d(TAG, "onBindViewHolder: " + position);
+
     }
 
     @NonNull
@@ -47,7 +54,7 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, B
         return new ViewHolder(view);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView house_image;
         private final ImageView wishlist;
         private final TextView house_name;
@@ -60,6 +67,24 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, B
             house_price = itemView.findViewById(R.id.browse_house_price);
             house_name =  itemView.findViewById(R.id.browse_house_name);
             wishlist = itemView.findViewById(R.id.add_wishlist);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int positon = getAdapterPosition();
+                    if (positon != RecyclerView.NO_POSITION && listener != null){
+                        listener.onItemClick(getSnapshots().getSnapshot(positon), positon);
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
     }
 }

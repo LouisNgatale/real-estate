@@ -7,14 +7,18 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
+import com.louisngatale.realestate.Services.Firestore;
 import com.louisngatale.realestate.Utils.HouseUtils;
 
 public class ItemViewActivity extends AppCompatActivity {
@@ -23,11 +27,18 @@ public class ItemViewActivity extends AppCompatActivity {
     TextView house_name,house_price, house_address, house_bed_count,
         house_bath_count, house_area, house_description, agent_name,
         agent_position;
+    DocumentReference docRef;
+    Firestore firestore;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private String TAG ="Items";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_view);
+
+        firestore = new Firestore();
 
         setStatusBar();
 
@@ -37,15 +48,17 @@ public class ItemViewActivity extends AppCompatActivity {
 
     private void retrieveHouse() {
         Intent intent = getIntent();
-
         if (null != intent){
-            int house_index = intent.getIntExtra("id",-1);
-            if (house_index != -1){
-                HouseUtils.getInstance();
-                House incomingHouse = HouseUtils.getHouseById(house_index);
-                if (null != incomingHouse){
-                    setLayout(incomingHouse);
-                }
+            String house_index = intent.getStringExtra("Id");
+            if (house_index != null){
+                docRef = db.collection("houses").document(house_index);
+
+                docRef.get().addOnSuccessListener(documentSnapshot -> {
+                    House incomingHouse = documentSnapshot.toObject(House.class);
+                    if (null != incomingHouse){
+                        setLayout(incomingHouse);
+                    }
+                });
             }
         }else {
             finish();
@@ -54,9 +67,10 @@ public class ItemViewActivity extends AppCompatActivity {
 
     private void setLayout(House incomingHouse) {
         initiateViews();
-       /* house_image.setImageResource(incomingHouse.getHouse_image());
-        house_price.setText(incomingHouse.getHouse_price());
-        house_description.setText(incomingHouse.getHouse_description());*/
+//        house_image.setImageResource(incomingHouse.getHouse_image());
+        house_price.setText(incomingHouse.getHousePrice());
+        house_description.setText(incomingHouse.getHouseDescription());
+        Log.d(TAG, "setLayout: " + incomingHouse.getHousePrice());
     }
 
     private void initiateViews() {

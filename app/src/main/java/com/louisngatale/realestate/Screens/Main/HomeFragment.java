@@ -1,12 +1,13 @@
 package com.louisngatale.realestate.Screens.Main;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,22 +15,22 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.RecyclerViews.BrowseRecyclerViewAdapter;
 import com.louisngatale.realestate.RecyclerViews.CategoryRecyclerViewAdapter;
+import com.louisngatale.realestate.Screens.ItemView.ItemViewActivity;
+import com.louisngatale.realestate.Services.Firestore;
 
 public class HomeFragment extends Fragment {
     CategoryRecyclerViewAdapter categoryRecyclerViewAdapter;
-
     BrowseRecyclerViewAdapter adapter;
-//    FirestoreRecyclerAdapter adapter;
     FirebaseFirestore db;
-
+    Firestore firestore;
     RecyclerView recyclerView, browse;
     private String TAG ="Home";
 
@@ -50,10 +51,12 @@ public class HomeFragment extends Fragment {
         browseRecyclerViewAdapter = new BrowseRecyclerViewAdapter(getContext());*/
 
         db = FirebaseFirestore.getInstance();
+        firestore = new Firestore();
 
 //        Create query
-        Query query = db
-                .collection("houses");
+        Query query =
+                firestore.getAllHouses();
+
 
 //        Configure the adapter options
         FirestoreRecyclerOptions<House> options =
@@ -61,30 +64,7 @@ public class HomeFragment extends Fragment {
                 .setQuery(query,House.class)
                 .build();
 
-        adapter = new BrowseRecyclerViewAdapter(options);
-
-//        Configure the adapter object
-         /*adapter =
-                new FirestoreRecyclerAdapter<House, HouseHolder>(options) {
-                    @NonNull
-                    @Override
-                    public HouseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.browse_houses_list_item,parent,false);
-                        return new HouseHolder(view);
-                    }
-
-                    @Override
-                    protected void onBindViewHolder(@NonNull HouseHolder holder, int position, @NonNull House model) {
-                        holder.house_description.setText(model.getHouseDescription());
-                        holder.house_name.setText(model.getHouseType());
-                        holder.house_price.setText(model.getHousePrice());
-                        Log.d(TAG, "onBindViewHolder: " + model.getHouseType());
-                        Log.d(TAG, "onBindViewHolder: " + model.getHousePrice());
-                        Log.d(TAG, "onBindViewHolder: " + model.getHouseImages());
-                    }
-
-                };*/
-
+        adapter = new BrowseRecyclerViewAdapter(options,getContext());
 
 //        TODO: Load category list items from database
 
@@ -92,6 +72,15 @@ public class HomeFragment extends Fragment {
         browse.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         browse.setAdapter(adapter);
 
+        adapter.setOnItemClickListener(new BrowseRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                String id = documentSnapshot.getId();
+                Intent viewItem = new Intent(getContext(), ItemViewActivity.class);
+                viewItem.putExtra("Id", id);
+                startActivity(viewItem);
+            }
+        });
     }
 
     @Override
