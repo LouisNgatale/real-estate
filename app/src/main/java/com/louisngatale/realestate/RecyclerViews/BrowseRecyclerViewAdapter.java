@@ -1,47 +1,43 @@
-/*
 package com.louisngatale.realestate.RecyclerViews;
 
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.louisngatale.realestate.Models.House;
+import com.louisngatale.realestate.R;
+import com.louisngatale.realestate.Screens.Main.HomeFragment;
 
-public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, HouseHolder> {
+public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, BrowseRecyclerViewAdapter.ViewHolder> {
 
-    */
-/**
+    private final String TAG="Home";
+
+    /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
      * @param options
-     *//*
-
+     */
     public BrowseRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<House> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull HouseHolder holder, int position, @NonNull House model) {
-
-
-    }
-
-    @NonNull
-    @Override
-    public HouseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
-    }
-
-
-   */
-/* ArrayList<House> house = new ArrayList<>();
-    private Context mContext;
-
-    public BrowseRecyclerViewAdapter(Context mContext) {
-        this.mContext = mContext;
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull House model) {
+        holder.house_description.setText(model.getHouseDescription());
+        holder.house_name.setText(model.getHouseType());
+        holder.house_price.setText(model.getHousePrice());
+        Log.d(TAG, "onBindViewHolder: " + model.getHouseType());
+        Log.d(TAG, "onBindViewHolder: " + model.getHousePrice());
+        Log.d(TAG, "onBindViewHolder: " + model.getHouseImages());
     }
 
     @NonNull
@@ -51,60 +47,12 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, H
         return new ViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-       *//*
-*/
-/* holder.house_name.setText(house.get(position).getHouse_name());
-        holder.house_description.setText(house.get(position).getHouse_description());
-        holder.house_price.setText(house.get(position).getHouse_price());
-        holder.house_image.setImageResource(house.get(position).getHouse_image());
-
-        if (house.get(position).isSaved()) {
-            holder.wishlist.setImageResource(R.drawable.tab_saved_orange);
-        } else {
-            holder.wishlist.setImageResource(R.drawable.tab_saved_white);
-        }
-
-//        TODO: Global click listener function
-//        TODO: Add item to wish list
-        holder.wishlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (house.get(position).isSaved()) {
-                    house.get(position).setSaved(false);
-                    holder.wishlist.setImageResource(R.drawable.tab_saved_white);
-                    Toast.makeText(mContext, "Item removed", Toast.LENGTH_SHORT).show();
-                } else {
-                    house.get(position).setSaved(true);
-                    holder.wishlist.setImageResource(R.drawable.tab_saved_orange);
-                    Toast.makeText(mContext, "Item added", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-//                TODO: ItemView click listener
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent itemView = new Intent(mContext, ItemViewActivity.class);
-                itemView.putExtra("id", position);
-                mContext.startActivity(itemView);
-            }
-        });*//*
-*/
-/*
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return house.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView house_image,wishlist;
-        private TextView house_name, house_description, house_price;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView house_image;
+        private final ImageView wishlist;
+        private final TextView house_name;
+        private final TextView house_description;
+        private final TextView house_price;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             house_image = itemView.findViewById(R.id.browse_house_image);
@@ -114,10 +62,4 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, H
             wishlist = itemView.findViewById(R.id.add_wishlist);
         }
     }
-
-    public void setHouse(ArrayList<House> house) {
-        this.house = house;
-    }*//*
-
 }
-*/

@@ -20,12 +20,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
+import com.louisngatale.realestate.RecyclerViews.BrowseRecyclerViewAdapter;
 import com.louisngatale.realestate.RecyclerViews.CategoryRecyclerViewAdapter;
 
 public class HomeFragment extends Fragment {
     CategoryRecyclerViewAdapter categoryRecyclerViewAdapter;
 
-    FirestoreRecyclerAdapter adapter;
+    BrowseRecyclerViewAdapter adapter;
+//    FirestoreRecyclerAdapter adapter;
     FirebaseFirestore db;
 
     RecyclerView recyclerView, browse;
@@ -59,8 +61,10 @@ public class HomeFragment extends Fragment {
                 .setQuery(query,House.class)
                 .build();
 
+        adapter = new BrowseRecyclerViewAdapter(options);
+
 //        Configure the adapter object
-         adapter =
+         /*adapter =
                 new FirestoreRecyclerAdapter<House, HouseHolder>(options) {
                     @NonNull
                     @Override
@@ -79,7 +83,7 @@ public class HomeFragment extends Fragment {
                         Log.d(TAG, "onBindViewHolder: " + model.getHouseImages());
                     }
 
-                };
+                };*/
 
 
 //        TODO: Load category list items from database
