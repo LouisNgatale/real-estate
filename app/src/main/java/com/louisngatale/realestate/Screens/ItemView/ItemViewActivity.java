@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.louisngatale.realestate.Models.House;
@@ -24,10 +25,14 @@ import com.louisngatale.realestate.Utils.HouseUtils;
 public class ItemViewActivity extends AppCompatActivity {
 
     ImageView house_image;
-    TextView house_name,house_price, house_address, house_bed_count,
-        house_bath_count, house_area, house_description, agent_name,
+    TextView house_type,house_price, house_address, house_bed_count,
+        house_bath_count, house_size, house_description, agent_name,
         agent_position;
     DocumentReference docRef;
+    ShimmerFrameLayout shimmer_itemView_house_type,
+            shimmer_itemView_price,shimmer_itemView_address,
+            shimmer_itemView_bed_count,shimmer_itemView_bath_count,
+            shimmer_itemView_size_count,shimmer_itemView_description;
     Firestore firestore;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -37,6 +42,7 @@ public class ItemViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_view);
+        initiateShimmers();
 
         firestore = new Firestore();
 
@@ -44,6 +50,16 @@ public class ItemViewActivity extends AppCompatActivity {
 
         retrieveHouse();
 
+    }
+
+    private void initiateShimmers() {
+        shimmer_itemView_address = findViewById(R.id.shimmer_itemView_address);
+        shimmer_itemView_bath_count = findViewById(R.id.shimmer_itemView_bath_count);
+        shimmer_itemView_bed_count = findViewById(R.id.shimmer_itemView_bed_count);
+        shimmer_itemView_description = findViewById(R.id.shimmer_itemView_description);
+        shimmer_itemView_house_type = findViewById(R.id.shimmer_itemView_house_type);
+        shimmer_itemView_price = findViewById(R.id.shimmer_itemView_price);
+        shimmer_itemView_size_count = findViewById(R.id.shimmer_itemView_size_count);
     }
 
     private void retrieveHouse() {
@@ -67,16 +83,44 @@ public class ItemViewActivity extends AppCompatActivity {
 
     private void setLayout(House incomingHouse) {
         initiateViews();
+        stopShimmers();
+        
 //        house_image.setImageResource(incomingHouse.getHouse_image());
         house_price.setText(incomingHouse.getHousePrice());
         house_description.setText(incomingHouse.getHouseDescription());
-        Log.d(TAG, "setLayout: " + incomingHouse.getHousePrice());
+        house_type.setText(incomingHouse.getHouseType());
+        house_address.setText(incomingHouse.getAddress());
+    }
+
+    private void stopShimmers() {
+        shimmer_itemView_address.setVisibility(View.GONE);
+        shimmer_itemView_bath_count.setVisibility(View.GONE);
+        shimmer_itemView_bed_count.setVisibility(View.GONE);
+        shimmer_itemView_description.setVisibility(View.GONE);
+        shimmer_itemView_house_type.setVisibility(View.GONE);
+        shimmer_itemView_price.setVisibility(View.GONE);
+        shimmer_itemView_size_count.setVisibility(View.GONE);
     }
 
     private void initiateViews() {
         house_image = findViewById(R.id.itemView_image);
         house_price = findViewById(R.id.itemView_price);
         house_description = findViewById(R.id.itemView_description);
+        house_type = findViewById(R.id.itemView_house_type);
+        house_address = findViewById(R.id.itemView_address);
+        house_bed_count = findViewById(R.id.itemView_bed_count);
+        house_bath_count = findViewById(R.id.itemView_bath_count);
+        house_size = findViewById(R.id.itemView_size_count);
+        
+//        Set visibility
+        house_image.setVisibility(View.VISIBLE);
+        house_price.setVisibility(View.VISIBLE);
+        house_type.setVisibility(View.VISIBLE);
+        house_bath_count.setVisibility(View.VISIBLE);
+        house_bed_count.setVisibility(View.VISIBLE);
+        house_address.setVisibility(View.VISIBLE);
+        house_description.setVisibility(View.VISIBLE);
+        house_size.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("ObsoleteSdkInt")
