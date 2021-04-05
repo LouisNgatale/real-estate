@@ -7,6 +7,7 @@
     tools:context=".Screens.ItemView.ItemViewActivity">
 
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
@@ -21,7 +22,22 @@
         android:focusable="true"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <com.denzcoskun.imageslider.ImageSlider
+        android:id="@+id/image_slider"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scaleType="centerCrop"
+        app:delay="0"
+        app:period="2000"
+        app:corner_radius="5"
+        app:placeholder="@drawable/house_2"
+        app:error_image="@drawable/error"
+        app:auto_cycle="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,MissingConstraints" />
+
+    <!--<ImageView
         android:id="@+id/itemView_image"
         android:layout_width="match_parent"
         android:layout_height="400dp"
@@ -29,7 +45,7 @@
         android:src="@drawable/house_2"
         tools:ignore="ContentDescription,MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp" />-->
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_itemView_house_type"
@@ -39,7 +55,7 @@
         android:layout_marginTop="8dp"
         app:shimmer_auto_start="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemView_image"         >
+        app:layout_constraintTop_toBottomOf="@+id/image_slider"         >
         <androidx.cardview.widget.CardView
             android:layout_width="300dp"
             android:layout_height="25dp"
@@ -59,7 +75,7 @@
         android:textColor="@color/orange"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemView_image" />
+        app:layout_constraintTop_toBottomOf="@+id/image_slider" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_itemView_price"

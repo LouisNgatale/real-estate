@@ -14,6 +14,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,12 +24,16 @@ import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.Services.Firestore;
 import com.louisngatale.realestate.Utils.HouseUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemViewActivity extends AppCompatActivity {
 
     ImageView house_image;
     TextView house_type,house_price, house_address, house_bed_count,
         house_bath_count, house_size, house_description, agent_name,
         agent_position;
+    ImageSlider slider;
     DocumentReference docRef;
     ShimmerFrameLayout shimmer_itemView_house_type,
             shimmer_itemView_price,shimmer_itemView_address,
@@ -35,6 +41,7 @@ public class ItemViewActivity extends AppCompatActivity {
             shimmer_itemView_size_count,shimmer_itemView_description;
     Firestore firestore;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    List<SlideModel> images;
 
     private String TAG ="Items";
 
@@ -81,18 +88,30 @@ public class ItemViewActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void setLayout(House incomingHouse) {
         initiateViews();
         stopShimmers();
         
 //        house_image.setImageResource(incomingHouse.getHouse_image());
-        house_price.setText(incomingHouse.getHousePrice());
+        house_price.setText(incomingHouse.getHousePrice() + " Tsh");
         house_description.setText(incomingHouse.getHouseDescription());
         house_type.setText(incomingHouse.getHouseType());
         house_address.setText(incomingHouse.getAddress());
         house_bed_count.setText(incomingHouse.getBedCount());
         house_bath_count.setText(incomingHouse.getBathCount());
-        house_size.setText(incomingHouse.getHouseSize());
+        house_size.setText(incomingHouse.getHouseSize() + " sqr meters");
+
+        images = new ArrayList<>();
+
+        incomingHouse
+                .getHouseImages()
+                .forEach(image -> {
+                    images.add(new SlideModel(image,incomingHouse.getHouseDescription()));
+                });
+
+        slider.setImageList(images,true);
+
     }
 
     private void stopShimmers() {
@@ -114,9 +133,10 @@ public class ItemViewActivity extends AppCompatActivity {
         house_bed_count = findViewById(R.id.itemView_bed_count);
         house_bath_count = findViewById(R.id.itemView_bath_count);
         house_size = findViewById(R.id.itemView_size_count);
-        
+        slider = findViewById(R.id.image_slider);
+
 //        Set visibility
-        house_image.setVisibility(View.VISIBLE);
+//        house_image.setVisibility(View.VISIBLE);
         house_price.setVisibility(View.VISIBLE);
         house_type.setVisibility(View.VISIBLE);
         house_bath_count.setVisibility(View.VISIBLE);

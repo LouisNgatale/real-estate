@@ -1,5 +1,6 @@
 package com.louisngatale.realestate.RecyclerViews;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -38,12 +40,21 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, B
         this.mContext = context;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull House model) {
         holder.house_description.setText(model.getHouseDescription());
         holder.house_name.setText(model.getHouseType());
-        holder.house_price.setText(model.getHousePrice());
+        holder.house_price.setText(model.getHousePrice() +" Tsh");
         Log.d(TAG, "onBindViewHolder: " + position);
+
+        try{
+            Glide.with(mContext)
+                    .load(model.getHouseImages().get(0))
+                    .into(holder.house_image);
+        }catch (Exception e){
+            Log.d(TAG, "onBindViewHolder: " + e);
+        }
 
     }
 

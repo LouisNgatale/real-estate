@@ -1,5 +1,6 @@
 package com.louisngatale.realestate.Services;
 
+import android.app.ProgressDialog;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -26,10 +27,12 @@ public class Firestore {
     House house;
     DocumentReference docRef;
 
-
     //    Add new house
-    public String addHouse(HashMap<String, Object> house, ArrayList<String> images){
+    public String addHouse(HashMap<String, Object> house, ArrayList<String> images, ProgressDialog mProgress){
         Firestorage firestorage = new Firestorage();
+        mProgress.setTitle("Uploading");
+        mProgress.setMessage("Please wait while uploading document");
+        mProgress.show();
         db.collection("houses")
                 .add(house)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -39,6 +42,7 @@ public class Firestore {
                         documentId = documentReference.getId();
                         // Upload images first
                         firestorage.uploadImages(images, documentId);
+                        mProgress.cancel();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -50,13 +54,11 @@ public class Firestore {
         return documentId;
     }
 
-
 //    Get all houses
     public Query getAllHouses(){
         return db
                 .collection("houses");
     }
-
 
 //    Get one house
     public House getHouse(String house_index){

@@ -3,6 +3,7 @@ package com.louisngatale.realestate.Screens.Main;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -85,6 +86,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     private final String TAG = "Dashboard";
     PicturePreviewRecyclerAdapter previewAdapter;
     private String realPath;
+    private ProgressDialog mProgress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,6 +97,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mProgress = new ProgressDialog(getActivity());
 
         initializeSpinner(view);
 
@@ -323,7 +327,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 map.put("houseSize", houseSizeValue);
 
             Firestore firestore = new Firestore();
-            String documentId = firestore.addHouse(map,images);
+            String documentId = firestore.addHouse(map,images,mProgress);
 
 
 

@@ -69,18 +69,16 @@ public class HomeFragment extends Fragment {
 //        TODO: Load category list items from database
 
 //        TODO: Load browser list items from database
-        browse.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        browse.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         browse.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new BrowseRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                String id = documentSnapshot.getId();
-                Intent viewItem = new Intent(getContext(), ItemViewActivity.class);
-                viewItem.putExtra("Id", id);
-                startActivity(viewItem);
-            }
+        adapter.setOnItemClickListener((documentSnapshot, position) -> {
+            String id = documentSnapshot.getId();
+            Intent viewItem = new Intent(getContext(), ItemViewActivity.class);
+            viewItem.putExtra("Id", id);
+            startActivity(viewItem);
         });
+
     }
 
     @Override
