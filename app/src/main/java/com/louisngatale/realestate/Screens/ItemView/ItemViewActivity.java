@@ -90,6 +90,9 @@ public class ItemViewActivity extends AppCompatActivity {
         house_description.setText(incomingHouse.getHouseDescription());
         house_type.setText(incomingHouse.getHouseType());
         house_address.setText(incomingHouse.getAddress());
+        house_bed_count.setText(incomingHouse.getBedCount());
+        house_bath_count.setText(incomingHouse.getBathCount());
+        house_size.setText(incomingHouse.getHouseSize());
     }
 
     private void stopShimmers() {

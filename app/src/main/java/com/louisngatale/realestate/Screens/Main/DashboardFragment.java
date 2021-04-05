@@ -303,7 +303,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
             houseSizeValue = houseSize.getText().toString();
             priceValue = Integer.valueOf(price.getText().toString());
             descriptionValue = description.getText().toString();
-//            addressValue = address.getText().toString();
+            addressValue = address.getText().toString();
 
             previewAdapter.getImages()
                           .forEach(image -> images.add(String.valueOf(image)));
@@ -318,6 +318,9 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 map.put("houseImages", emptyImages);
                 map.put("housePrice", priceValue.toString());
                 map.put("houseType", houseTypeValue);
+                map.put("bathCount", bathRoomsValue);
+                map.put("bedCount", bedRoomsValue);
+                map.put("houseSize", houseSizeValue);
 
             Firestore firestore = new Firestore();
             String documentId = firestore.addHouse(map,images);

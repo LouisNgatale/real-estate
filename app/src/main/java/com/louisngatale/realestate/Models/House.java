@@ -10,19 +10,25 @@ public class House {
     private String houseDescription;
     private String address;
     private String agentName;
+    private String bathCount;
+    private String bedCount;
+    private String houseSize;
     private String agentAuthority;
     private boolean saved = false;
 
     public House() {
     }
 
-    public House(String houseType, ArrayList<String> houseImages, String  housePrice, String houseDescription, String address, String agentName, String agentAuthority) {
+    public House(String houseType, ArrayList<String> houseImages, String housePrice, String houseDescription, String address, String agentName, String bathCount, String bedCount, String houseSize, String agentAuthority) {
         this.houseType = houseType;
         this.houseImages = houseImages;
         this.housePrice = housePrice;
         this.houseDescription = houseDescription;
         this.address = address;
         this.agentName = agentName;
+        this.bathCount = bathCount;
+        this.bedCount = bedCount;
+        this.houseSize = houseSize;
         this.agentAuthority = agentAuthority;
     }
 
@@ -90,4 +96,27 @@ public class House {
         this.saved = saved;
     }
 
+    public String getBathCount() {
+        return bathCount;
+    }
+
+    public void setBathCount(String bathCount) {
+        this.bathCount = bathCount;
+    }
+
+    public String getBedCount() {
+        return bedCount;
+    }
+
+    public void setBedCount(String bedCount) {
+        this.bedCount = bedCount;
+    }
+
+    public String getHouseSize() {
+        return houseSize;
+    }
+
+    public void setHouseSize(String houseSize) {
+        this.houseSize = houseSize;
+    }
 }
