@@ -23,6 +23,8 @@
     <string name="wish_list_title">Wish List</string>
     <string name="search_placeholder">Search</string>
     <string name="add_hosting">Add hosting</string>
+    <string name="add_house">Add house</string>
+    <string name="book_house">Book house</string>
 
 
     <string-array name="house_types">

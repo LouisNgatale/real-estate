@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemViewActivity extends AppCompatActivity {
-
     ImageView house_image;
     TextView house_type,house_price, house_address, house_bed_count,
         house_bath_count, house_size, house_description, agent_name,
