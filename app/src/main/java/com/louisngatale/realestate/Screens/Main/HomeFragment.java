@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore db;
     Firestore firestore;
     RecyclerView recyclerView, browse;
-    private String TAG ="Home";
+    private String TAG ="Items";
     SharedPreferences sharedPreferences;
 
 
@@ -106,9 +106,11 @@ public class HomeFragment extends Fragment {
             if (set.contains(id)){
                 set.remove(id);
                 Toast.makeText(getContext(), "Added", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onViewCreated: "+ set);
             }else {
                 set.add(id);
                 Toast.makeText(getContext(), "Removed", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onViewCreated: "+ set);
             }
             editor.putStringSet("Wishlist", set);
             editor.apply();

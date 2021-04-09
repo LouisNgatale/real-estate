@@ -62,21 +62,19 @@ public class WishListFragment extends Fragment {
 
         sharedPreferences = getContext().getSharedPreferences("WISHLIST",MODE_PRIVATE);
 
-
         firestore = new Firestore();
 
         @SuppressLint("CommitPrefEdits")
         Set<String> set = sharedPreferences.getStringSet("Wishlist", null);
 
-        Log.d(TAG, "onViewCreated: " + set);
-        // Initialize the set if it was empty
-        if (set != null){
+        // check if set is not empty
+        if (set.size() > 0){
             emptyPlaceholder.setVisibility(View.GONE);
             //        Create query
             Query query =
                     firestore.getHouses(set);
 
-            Log.d(TAG, "onViewCreated: " + query.get());
+            Log.d(TAG, "onViewCreated: " + set);
 
             //        Configure the adapter options
             FirestoreRecyclerOptions<House> options =
@@ -86,8 +84,6 @@ public class WishListFragment extends Fragment {
 
             String count = String.valueOf(set.size());
             item_counter.setText(count);
-
-
 
             adapter = new WishListRecyclerViewAdapter(options,getContext());
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
@@ -99,20 +95,16 @@ public class WishListFragment extends Fragment {
                 viewItem.putExtra("Id", id);
                 startActivity(viewItem);
             });
-
         }
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        adapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
     }
 }
