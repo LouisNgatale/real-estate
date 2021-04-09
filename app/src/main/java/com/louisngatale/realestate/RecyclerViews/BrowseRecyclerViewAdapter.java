@@ -3,6 +3,7 @@ package com.louisngatale.realestate.RecyclerViews;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,16 @@ import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.Screens.ItemView.ItemViewActivity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, BrowseRecyclerViewAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
+    private OnWishListListener mWishListListener;
+
 
     private final String TAG="Home";
     Context mContext;
@@ -47,6 +55,8 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, B
         holder.house_name.setText(model.getHouseType());
         holder.house_price.setText(model.getHousePrice() +" Tsh");
         Log.d(TAG, "onBindViewHolder: " + position);
+
+
 
         try{
             Glide.with(mContext)
@@ -79,13 +89,17 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, B
             house_name =  itemView.findViewById(R.id.browse_house_name);
             wishlist = itemView.findViewById(R.id.add_wishlist);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int positon = getAdapterPosition();
-                    if (positon != RecyclerView.NO_POSITION && listener != null){
-                        listener.onItemClick(getSnapshots().getSnapshot(positon), positon);
-                    }
+            wishlist.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null){
+                    mWishListListener.onWishListListener(getSnapshots().getSnapshot(position), position);
+                }
+            });
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null){
+                    listener.onItemClick(getSnapshots().getSnapshot(position), position);
                 }
             });
         }
@@ -95,7 +109,16 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, B
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
+    public interface OnWishListListener{
+        void onWishListListener(DocumentSnapshot documentSnapshot, int position);
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
     }
+
+    public void setOnWishListListener(OnWishListListener mWishListListener){
+        this.mWishListListener = mWishListListener;
+    }
+
 }

@@ -1,7 +1,10 @@
 package com.louisngatale.realestate.Screens.Main;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,11 @@ import com.louisngatale.realestate.RecyclerViews.CategoryRecyclerViewAdapter;
 import com.louisngatale.realestate.Screens.ItemView.ItemViewActivity;
 import com.louisngatale.realestate.Services.Firestore;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class HomeFragment extends Fragment {
     CategoryRecyclerViewAdapter categoryRecyclerViewAdapter;
     BrowseRecyclerViewAdapter adapter;
@@ -33,6 +41,8 @@ public class HomeFragment extends Fragment {
     Firestore firestore;
     RecyclerView recyclerView, browse;
     private String TAG ="Home";
+    SharedPreferences sharedPreferences;
+
 
     @Nullable
     @Override
@@ -46,6 +56,8 @@ public class HomeFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.categories_recycler_view);
         browse = view.findViewById(R.id.browse_houses_recycler_view);
+        sharedPreferences = getContext().getSharedPreferences("WISHLIST",MODE_PRIVATE);
+
 /*
         categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter();
         browseRecyclerViewAdapter = new BrowseRecyclerViewAdapter(getContext());*/
@@ -78,6 +90,30 @@ public class HomeFragment extends Fragment {
             viewItem.putExtra("Id", id);
             startActivity(viewItem);
         });
+
+        adapter.setOnWishListListener(((documentSnapshot, position) -> {
+            String id = documentSnapshot.getId();
+
+            @SuppressLint("CommitPrefEdits")
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            Set<String> set = sharedPreferences.getStringSet("Wishlist", null);
+
+            // Initialize the set if it was empty
+            if (set == null){
+                set = new HashSet<>();
+            }
+
+            // Set the values
+            if (set.contains(id)){
+                set.remove(id);
+            }else {
+                set.add(id);
+            }
+
+            editor.putStringSet("Wishlist", set);
+            editor.apply();
+            Toast.makeText(getContext(), "Set Applied", Toast.LENGTH_SHORT).show();
+        }));
 
     }
 

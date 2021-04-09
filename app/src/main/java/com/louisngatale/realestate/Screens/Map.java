@@ -66,8 +66,6 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback , View.
 
         saveAddress.setOnClickListener(this);
 
-
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
