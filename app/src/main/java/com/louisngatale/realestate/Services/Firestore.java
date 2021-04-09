@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -19,6 +20,8 @@ import com.louisngatale.realestate.Models.House;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class Firestore {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -69,5 +72,19 @@ public class Firestore {
             Log.d(TAG, "getHouse: " + this.house);
         });
         return this.house;
+    }
+
+    public Query getHouses(Set<String> set) {
+
+
+        List<String> id = new ArrayList<>(set);
+        Log.d(TAG, "getHouses: " + id);
+
+        docRef = db.collection("houses").document();
+
+        return db
+                .collection("houses")
+                .whereIn(FieldPath.documentId(), id);
+
     }
 }

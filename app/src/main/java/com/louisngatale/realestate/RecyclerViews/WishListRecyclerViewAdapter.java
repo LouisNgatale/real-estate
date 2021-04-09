@@ -1,7 +1,9 @@
 package com.louisngatale.realestate.RecyclerViews;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +12,30 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.Screens.ItemView.ItemViewActivity;
 
 import java.util.ArrayList;
 
-public class WishListRecyclerViewAdapter extends RecyclerView.Adapter<WishListRecyclerViewAdapter.ViewHolder> {
-
-    ArrayList<House> houses = new ArrayList<>();
+public class WishListRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, WishListRecyclerViewAdapter.ViewHolder> {
+    private static final String TAG = "Items";
     private Context mContext;
-
-    public WishListRecyclerViewAdapter(Context mContext) {
-        this.mContext = mContext;
+    
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     * @param context
+     */
+    public WishListRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<House> options, Context context) {
+        super(options);
+        this.mContext = context;
     }
 
     @NonNull
@@ -32,29 +45,24 @@ public class WishListRecyclerViewAdapter extends RecyclerView.Adapter<WishListRe
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        /*holder.house_image.setImageResource(houses.get(position).getHouse_image());
-        holder.house_name.setText(houses.get(position).getHouse_name());
-        holder.house_price.setText(houses.get(position).getHouse_price());
-        holder.house_description.setText(houses.get(position).getHouse_description());
-        holder.house_address.setText(houses.get(position).getAddress());
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull House model) {
+        holder.house_name.setText(model.getHouseType());
+        holder.house_price.setText(model.getHousePrice() +" Tsh");
+        holder.house_description.setText(model.getHouseDescription());
+        holder.house_address.setText(model.getAddress());
+        Log.d(TAG, "onBindViewHolder: " + model.getHouseType());
 
-        //                TODO: ItemView click listener
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent itemView = new Intent(mContext, ItemViewActivity.class);
-                itemView.putExtra("id", position);
-                mContext.startActivity(itemView);
-            }
-        });*/
+        try{
+            Glide.with(mContext)
+                    .load(model.getHouseImages().get(0))
+                    .into(holder.house_image);
+        }catch (Exception e){
+            Log.d(TAG, "onBindViewHolder: " + e);
+        }
     }
 
-    @Override
-    public int getItemCount() {
-        return houses.size();
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView house_image;
@@ -71,9 +79,5 @@ public class WishListRecyclerViewAdapter extends RecyclerView.Adapter<WishListRe
             house_address = itemView.findViewById(R.id.wishList_location);
             house_price = itemView.findViewById(R.id.wishList_price);
         }
-    }
-
-    public void setHouses(ArrayList<House> houses) {
-        this.houses = houses;
     }
 }
