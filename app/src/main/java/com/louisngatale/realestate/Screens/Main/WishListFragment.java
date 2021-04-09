@@ -2,6 +2,7 @@ package com.louisngatale.realestate.Screens.Main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.RecyclerViews.BrowseRecyclerViewAdapter;
 import com.louisngatale.realestate.RecyclerViews.WishListRecyclerViewAdapter;
+import com.louisngatale.realestate.Screens.ItemView.ItemViewActivity;
 import com.louisngatale.realestate.Services.Firestore;
 import com.louisngatale.realestate.Utils.HouseUtils;
 
@@ -85,9 +87,19 @@ public class WishListFragment extends Fragment {
             String count = String.valueOf(set.size());
             item_counter.setText(count);
 
+
+
             adapter = new WishListRecyclerViewAdapter(options,getContext());
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
             recyclerView.setAdapter(adapter);
+
+            adapter.setOnItemClickListener((documentSnapshot, position) -> {
+                String id = documentSnapshot.getId();
+                Intent viewItem = new Intent(getContext(), ItemViewActivity.class);
+                viewItem.putExtra("Id", id);
+                startActivity(viewItem);
+            });
+
         }
 
     }

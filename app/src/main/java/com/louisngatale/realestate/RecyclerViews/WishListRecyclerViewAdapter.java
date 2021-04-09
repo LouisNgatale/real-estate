@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.Screens.ItemView.ItemViewActivity;
@@ -25,7 +26,8 @@ import java.util.ArrayList;
 public class WishListRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, WishListRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "Items";
     private Context mContext;
-    
+    private OnItemClickListener listener;
+
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
@@ -64,7 +66,7 @@ public class WishListRecyclerViewAdapter extends FirestoreRecyclerAdapter<House,
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView house_image;
         TextView house_name,
                  house_description,
@@ -78,6 +80,22 @@ public class WishListRecyclerViewAdapter extends FirestoreRecyclerAdapter<House,
             house_description = itemView.findViewById(R.id.wishList_description);
             house_address = itemView.findViewById(R.id.wishList_location);
             house_price = itemView.findViewById(R.id.wishList_price);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null){
+                    listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
         }
     }
+
+    public interface OnItemClickListener{
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
+
 }
