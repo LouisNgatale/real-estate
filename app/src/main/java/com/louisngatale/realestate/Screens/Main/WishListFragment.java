@@ -68,33 +68,35 @@ public class WishListFragment extends Fragment {
         Set<String> set = sharedPreferences.getStringSet("Wishlist", null);
 
         // check if set is not empty
-        if (set.size() > 0){
-            emptyPlaceholder.setVisibility(View.GONE);
-            //        Create query
-            Query query =
-                    firestore.getHouses(set);
+        if (set != null){
+            if (set.size() > 0){
+                emptyPlaceholder.setVisibility(View.GONE);
+                //        Create query
+                Query query =
+                        firestore.getHouses(set);
 
-            Log.d(TAG, "onViewCreated: " + set);
+                Log.d(TAG, "onViewCreated: " + set);
 
-            //        Configure the adapter options
-            FirestoreRecyclerOptions<House> options =
-                    new FirestoreRecyclerOptions.Builder<House>()
-                            .setQuery(query,House.class)
-                            .build();
+                //        Configure the adapter options
+                FirestoreRecyclerOptions<House> options =
+                        new FirestoreRecyclerOptions.Builder<House>()
+                                .setQuery(query,House.class)
+                                .build();
 
-            String count = String.valueOf(set.size());
-            item_counter.setText(count);
+                String count = String.valueOf(set.size());
+                item_counter.setText(count);
 
-            adapter = new WishListRecyclerViewAdapter(options,getContext());
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-            recyclerView.setAdapter(adapter);
+                adapter = new WishListRecyclerViewAdapter(options,getContext());
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+                recyclerView.setAdapter(adapter);
 
-            adapter.setOnItemClickListener((documentSnapshot, position) -> {
-                String id = documentSnapshot.getId();
-                Intent viewItem = new Intent(getContext(), ItemViewActivity.class);
-                viewItem.putExtra("Id", id);
-                startActivity(viewItem);
-            });
+                adapter.setOnItemClickListener((documentSnapshot, position) -> {
+                    String id = documentSnapshot.getId();
+                    Intent viewItem = new Intent(getContext(), ItemViewActivity.class);
+                    viewItem.putExtra("Id", id);
+                    startActivity(viewItem);
+                });
+            }
         }
     }
 
