@@ -80,7 +80,6 @@ public class HomeFragment extends Fragment {
 
 //        TODO: Load category list items from database
 
-//        TODO: Load browser list items from database
         browse.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         browse.setAdapter(adapter);
 
@@ -106,13 +105,14 @@ public class HomeFragment extends Fragment {
             // Set the values
             if (set.contains(id)){
                 set.remove(id);
+                Toast.makeText(getContext(), "Added", Toast.LENGTH_SHORT).show();
             }else {
                 set.add(id);
+                Toast.makeText(getContext(), "Removed", Toast.LENGTH_SHORT).show();
             }
 
             editor.putStringSet("Wishlist", set);
             editor.apply();
-            Toast.makeText(getContext(), "Set Applied", Toast.LENGTH_SHORT).show();
         }));
 
     }

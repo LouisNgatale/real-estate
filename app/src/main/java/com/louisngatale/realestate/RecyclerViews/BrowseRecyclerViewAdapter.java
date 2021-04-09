@@ -54,9 +54,6 @@ public class BrowseRecyclerViewAdapter extends FirestoreRecyclerAdapter<House, B
         holder.house_description.setText(model.getHouseDescription());
         holder.house_name.setText(model.getHouseType());
         holder.house_price.setText(model.getHousePrice() +" Tsh");
-        Log.d(TAG, "onBindViewHolder: " + position);
-
-
 
         try{
             Glide.with(mContext)

@@ -75,8 +75,6 @@ public class Firestore {
     }
 
     public Query getHouses(Set<String> set) {
-
-
         List<String> id = new ArrayList<>(set);
         Log.d(TAG, "getHouses: " + id);
 
