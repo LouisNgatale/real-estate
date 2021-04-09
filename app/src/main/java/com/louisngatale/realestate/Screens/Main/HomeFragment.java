@@ -110,7 +110,6 @@ public class HomeFragment extends Fragment {
                 set.add(id);
                 Toast.makeText(getContext(), "Removed", Toast.LENGTH_SHORT).show();
             }
-
             editor.putStringSet("Wishlist", set);
             editor.apply();
         }));

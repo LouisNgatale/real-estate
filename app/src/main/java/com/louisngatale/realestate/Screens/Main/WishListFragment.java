@@ -69,10 +69,8 @@ public class WishListFragment extends Fragment {
         Log.d(TAG, "onViewCreated: " + set);
         // Initialize the set if it was empty
         if (set != null){
+            emptyPlaceholder.setVisibility(View.GONE);
             //        Create query
-          /*  Query query =
-                    firestore.getHouses(set);*/
-
             Query query =
                     firestore.getHouses(set);
 
@@ -83,6 +81,9 @@ public class WishListFragment extends Fragment {
                     new FirestoreRecyclerOptions.Builder<House>()
                             .setQuery(query,House.class)
                             .build();
+
+            String count = String.valueOf(set.size());
+            item_counter.setText(count);
 
             adapter = new WishListRecyclerViewAdapter(options,getContext());
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
