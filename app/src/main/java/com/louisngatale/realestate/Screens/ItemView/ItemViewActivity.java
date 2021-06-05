@@ -139,7 +139,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
         // Open phone manager app to call the owner of the app
         itemView_call.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+255628309362"));
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+255628309362"));// Initiates the Intent
             startActivity(intent);
         });
 
@@ -148,7 +148,8 @@ public class ItemViewActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            intent.setData(Uri.parse("smsto:" + "+255628309362")); // This ensures only SMS apps respond
+            // This ensures only SMS apps respond
+            intent.setData(Uri.parse("smsto:" + "0628309362"));
             intent.putExtra("sms_body", "Hey how are you doing");
             startActivity(intent);
         });
