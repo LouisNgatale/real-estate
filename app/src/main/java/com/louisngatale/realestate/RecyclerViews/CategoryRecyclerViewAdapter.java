@@ -1,6 +1,7 @@
 package com.louisngatale.realestate.RecyclerViews;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 
@@ -18,8 +20,13 @@ import java.util.ArrayList;
 
 public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG = "Categories";
     private ArrayList<House> house = new ArrayList<>();
+    Context mContext;
 
+    public CategoryRecyclerViewAdapter(Context mContext) {
+        this.mContext = mContext;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView house_image,wishlist;
@@ -42,10 +49,17 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
     @Override
     public void onBindViewHolder(@NonNull CategoryRecyclerViewAdapter.ViewHolder holder, int position) {
- /*       holder.house_name.setText(house.get(position).getHouse_name());
-        holder.house_description.setText(house.get(position).getHouse_description());
-        holder.house_price.setText(house.get(position).getHouse_price());
-        holder.house_image.setImageResource(house.get(position).getHouse_image());*/
+        holder.house_name.setText(house.get(position).getHouseType());
+        holder.house_description.setText(house.get(position).getHouseDescription());
+        holder.house_price.setText(house.get(position).getHousePrice());
+        try{
+            Glide.with(mContext)
+                    .load(house.get(position).getHouseImages().get(0))
+                    .into(holder.house_image);
+        }catch (Exception e){
+            Log.d(TAG, "onBindViewHolder: " + e);
+        }
+
     }
 
     @Override

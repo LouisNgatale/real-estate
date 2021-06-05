@@ -43,7 +43,6 @@ public class HomeFragment extends Fragment {
     private String TAG ="Items";
     SharedPreferences sharedPreferences;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,11 +56,10 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.categories_recycler_view);
         browse = view.findViewById(R.id.browse_houses_recycler_view);
         sharedPreferences = getContext().getSharedPreferences("WISHLIST",MODE_PRIVATE);
+        Log.d(TAG, "onViewCreated: " + browse);
+        categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(getContext());
 
-/*
-        categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter();
-        browseRecyclerViewAdapter = new BrowseRecyclerViewAdapter(getContext());*/
-
+        recyclerView.setAdapter(categoryRecyclerViewAdapter);
         db = FirebaseFirestore.getInstance();
         firestore = new Firestore();
 
@@ -78,10 +76,14 @@ public class HomeFragment extends Fragment {
 
         adapter = new BrowseRecyclerViewAdapter(options,getContext());
 
+
 //        TODO: Load category list items from database
 
         browse.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         browse.setAdapter(adapter);
+        browse.setNestedScrollingEnabled(false);
+
+        Log.d(TAG, "onViewCreated: " + browse);
 
         adapter.setOnItemClickListener((documentSnapshot, position) -> {
             String id = documentSnapshot.getId();
@@ -130,16 +132,4 @@ public class HomeFragment extends Fragment {
         adapter.stopListening();
     }
 
-    private static class HouseHolder extends RecyclerView.ViewHolder {
-        private   ImageView house_image,wishlist;
-        private   TextView house_name, house_description, house_price;
-        public HouseHolder(View view) {
-            super(view);
-            house_image = itemView.findViewById(R.id.browse_house_image);
-            house_description = itemView.findViewById(R.id.browse_house_description);
-            house_price = itemView.findViewById(R.id.browse_house_price);
-            house_name =  itemView.findViewById(R.id.browse_house_name);
-            wishlist = itemView.findViewById(R.id.add_wishlist);
-        }
-    }
 }

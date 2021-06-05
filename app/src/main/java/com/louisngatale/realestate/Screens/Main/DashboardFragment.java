@@ -68,7 +68,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     private ImageView placeholder;
     String currentPhotoPath;
 
-
     Spinner spinner;
     EditText bedRooms, bathRooms, houseSize, price, description;
     TextView address;

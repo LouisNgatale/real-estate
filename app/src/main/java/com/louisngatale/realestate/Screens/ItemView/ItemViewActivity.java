@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemViewActivity extends AppCompatActivity {
-    ImageView house_image;
+    ImageView house_image,itemView_call,itemView_message;
     TextView house_type,house_price, house_address, house_bed_count,
         house_bath_count, house_size, house_description, agent_name,
         agent_position;
@@ -48,6 +49,7 @@ public class ItemViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_view);
+
         initiateShimmers();
 
         firestore = new Firestore();
@@ -55,7 +57,6 @@ public class ItemViewActivity extends AppCompatActivity {
         setStatusBar();
 
         retrieveHouse();
-
     }
 
     private void initiateShimmers() {
@@ -92,7 +93,7 @@ public class ItemViewActivity extends AppCompatActivity {
         initiateViews();
         stopShimmers();
         
-//        house_image.setImageResource(incomingHouse.getHouse_image());
+        //  House_image.setImageResource(incomingHouse.getHouse_image());
         house_price.setText(incomingHouse.getHousePrice() + " Tsh");
         house_description.setText(incomingHouse.getHouseDescription());
         house_type.setText(incomingHouse.getHouseType());
@@ -110,7 +111,6 @@ public class ItemViewActivity extends AppCompatActivity {
                 });
 
         slider.setImageList(images,true);
-
     }
 
     private void stopShimmers() {
@@ -134,8 +134,27 @@ public class ItemViewActivity extends AppCompatActivity {
         house_size = findViewById(R.id.itemView_size_count);
         slider = findViewById(R.id.image_slider);
 
-//        Set visibility
-//        house_image.setVisibility(View.VISIBLE);
+        itemView_message = findViewById(R.id.itemView_message);
+        itemView_call = findViewById(R.id.itemView_call);
+
+        // Open phone manager app to call the owner of the app
+        itemView_call.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+255628309362"));
+            startActivity(intent);
+        });
+
+        // Open message app with user's number to send message
+        itemView_message.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            intent.setData(Uri.parse("smsto:" + "+255628309362")); // This ensures only SMS apps respond
+            intent.putExtra("sms_body", "Hey how are you doing");
+            startActivity(intent);
+        });
+
+        //  Set visibility
+        //  house_image.setVisibility(View.VISIBLE);
         house_price.setVisibility(View.VISIBLE);
         house_type.setVisibility(View.VISIBLE);
         house_bath_count.setVisibility(View.VISIBLE);

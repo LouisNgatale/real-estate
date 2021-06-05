@@ -110,7 +110,6 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback , View.
 
     @SuppressLint("ObsoleteSdkInt")
     private void addMarker(GoogleMap googleMap) {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if (getApplicationContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 //  Get location
