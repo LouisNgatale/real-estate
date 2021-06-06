@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     }else {
                         selectedFragment = new DashboardFragment();
                     }
-                        selectedFragment = new HomeFragment();
+//                        selectedFragment = new HomeFragment();
                     break;
             }
 
