@@ -38,6 +38,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.OnUploadEventListener;
 import com.louisngatale.realestate.R;
@@ -64,6 +69,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         REQUEST_IMAGE_CAPTURE = 102,
         EXTERNAL_STORAGE_PERMISSION_CODE = 103,
         PICK_IMAGE = 104;
+    private FirebaseAuth mAuth;
 
     private ImageView placeholder;
     String currentPhotoPath;
@@ -97,6 +103,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mAuth = FirebaseAuth.getInstance();
         mProgress = new ProgressDialog(getActivity());
 
         initializeSpinner(view);
@@ -313,22 +320,34 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
             ArrayList<String> emptyImages = new ArrayList<>();
 
-            HashMap<String, Object> map = new HashMap<>();
-                map.put("address", addressValue);
-                map.put("agentAuthority", "Owner");
-                map.put("agentName", "John Doe");
-                map.put("houseDescription", descriptionValue);
-                map.put("houseImages", emptyImages);
-                map.put("housePrice", priceValue.toString());
-                map.put("houseType", houseTypeValue);
-                map.put("bathCount", bathRoomsValue);
-                map.put("bedCount", bedRoomsValue);
-                map.put("houseSize", houseSizeValue);
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String uid = mAuth.getUid();
 
-            Firestore firestore = new Firestore();
-            String documentId = firestore.addHouse(map,images,mProgress);
+            db.collection("users")
+                .document(uid)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String phone_number = task.getResult().get("phone_number").toString();
 
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("address", addressValue);
+                        map.put("agentAuthority", "Owner");
+                        map.put("agentName", "John Doe");
+                        map.put("houseDescription", descriptionValue);
+                        map.put("houseImages", emptyImages);
+                        map.put("housePrice", priceValue.toString());
+                        map.put("houseType", houseTypeValue);
+                        map.put("bathCount", bathRoomsValue);
+                        map.put("bedCount", bedRoomsValue);
+                        map.put("phone_number", phone_number);
+                        map.put("houseSize", houseSizeValue);
+                        map.put("uid", uid);
 
+                        Firestore firestore = new Firestore();
+                        String documentId = firestore.addHouse(map,images,mProgress);
+                    }
+                });
 
         }
 
