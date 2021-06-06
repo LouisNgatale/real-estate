@@ -53,13 +53,11 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(R.id.categories_recycler_view);
         browse = view.findViewById(R.id.browse_houses_recycler_view);
         sharedPreferences = getContext().getSharedPreferences("WISHLIST",MODE_PRIVATE);
         Log.d(TAG, "onViewCreated: " + browse);
         categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(getContext());
 
-        recyclerView.setAdapter(categoryRecyclerViewAdapter);
         db = FirebaseFirestore.getInstance();
         firestore = new Firestore();
 
@@ -76,9 +74,7 @@ public class HomeFragment extends Fragment {
 
         adapter = new BrowseRecyclerViewAdapter(options,getContext());
 
-
 //        TODO: Load category list items from database
-
         browse.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         browse.setAdapter(adapter);
         browse.setNestedScrollingEnabled(false);

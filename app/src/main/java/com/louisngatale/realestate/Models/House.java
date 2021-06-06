@@ -14,6 +14,7 @@ public class House {
     private String bedCount;
     private String houseSize;
     private String agentAuthority;
+    private String phone_number;
     private boolean saved = false;
 
     public House() {
@@ -30,6 +31,14 @@ public class House {
         this.bedCount = bedCount;
         this.houseSize = houseSize;
         this.agentAuthority = agentAuthority;
+    }
+
+    public String getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
     public String getHouseType() {

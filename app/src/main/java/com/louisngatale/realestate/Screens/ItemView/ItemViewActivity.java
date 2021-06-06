@@ -42,6 +42,7 @@ public class ItemViewActivity extends AppCompatActivity {
     Firestore firestore;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     List<SlideModel> images;
+    House incomingHouse;
 
     private String TAG ="Items";
 
@@ -77,7 +78,7 @@ public class ItemViewActivity extends AppCompatActivity {
                 docRef = db.collection("houses").document(house_index);
 
                 docRef.get().addOnSuccessListener(documentSnapshot -> {
-                    House incomingHouse = documentSnapshot.toObject(House.class);
+                    incomingHouse = documentSnapshot.toObject(House.class);
                     if (null != incomingHouse){
                         setLayout(incomingHouse);
                     }
@@ -139,7 +140,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
         // Open phone manager app to call the owner of the app
         itemView_call.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "+255628309362"));// Initiates the Intent
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + incomingHouse.getPhone_number()));// Initiates the Intent
             startActivity(intent);
         });
 
@@ -149,8 +150,8 @@ public class ItemViewActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             // This ensures only SMS apps respond
-            intent.setData(Uri.parse("smsto:" + "0628309362"));
-            intent.putExtra("sms_body", "Hey how are you doing");
+            intent.setData(Uri.parse("smsto:" + incomingHouse.getPhone_number()));
+            intent.putExtra("sms_body", "Hello! How are you doing");
             startActivity(intent);
         });
 
