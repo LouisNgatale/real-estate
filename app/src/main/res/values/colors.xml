@@ -4,6 +4,7 @@
     <color name="black">#000000</color>
     <color name="dark_grey">#5B5A5A</color>
     <color name="mid_grey">#949494</color>
+    <color name="light_grey">#F3F3F3</color>
 
     <!--   color for the app bar and other primary UI elements -->
     <color name="white">#FFFFFFFF</color>

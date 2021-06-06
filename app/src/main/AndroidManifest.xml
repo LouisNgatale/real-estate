@@ -6,10 +6,14 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
@@ -25,6 +29,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RealEstate"
         tools:ignore="AllowBackup">
+        <activity android:name=".Screens.RegisterActivity"></activity>
+        <activity android:name=".Screens.LoginActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -53,9 +59,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Screens.Main.MainActivity" />
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>
