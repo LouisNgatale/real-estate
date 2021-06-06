@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,7 +21,7 @@ import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
     Button register,login;
-    TextView fullname,email,phone_number,password;
+    EditText fullname,email,phone_number,password;
     FirebaseAuth mAuth;
     FirebaseFirestore mFirestore;
 
