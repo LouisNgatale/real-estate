@@ -1,6 +1,5 @@
 package com.louisngatale.realestate.Screens.ItemView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -9,7 +8,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,10 +18,7 @@ import android.widget.Toast;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,7 +26,6 @@ import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.Screens.LoginActivity;
 import com.louisngatale.realestate.Services.Firestore;
-import com.louisngatale.realestate.Utils.HouseUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -167,6 +161,9 @@ public class ItemViewActivity extends AppCompatActivity {
             HashMap<String, String> order = new HashMap<>();
             order.put("Client",mAuth.getUid());
 
+            HashMap<String, String> wishlist = new HashMap<>();
+            wishlist.put("House",house_index);
+
             // Add the order to the firebase collection
             db.collection("houses/" + house_index + "/orders")
                 .document(mAuth.getUid())
@@ -174,6 +171,11 @@ public class ItemViewActivity extends AppCompatActivity {
                     if (task.isSuccessful())
                         Toast.makeText(ItemViewActivity.this, "Item Added successfully!", Toast.LENGTH_SHORT).show();
                 });
+
+            // Add the house to user's wishlist
+            db.collection("users/" + mAuth.getUid() + "/wishlist")
+                    .document(house_index)
+                    .set(wishlist);
 
         });
 
@@ -204,6 +206,7 @@ public class ItemViewActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
             setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
         }
+
         if (Build.VERSION.SDK_INT >= 19) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
