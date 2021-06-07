@@ -1,5 +1,6 @@
 package com.louisngatale.realestate.Screens.ItemView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,18 +15,26 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.louisngatale.realestate.Models.House;
 import com.louisngatale.realestate.R;
+import com.louisngatale.realestate.Screens.LoginActivity;
 import com.louisngatale.realestate.Services.Firestore;
 import com.louisngatale.realestate.Utils.HouseUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemViewActivity extends AppCompatActivity {
@@ -43,6 +52,9 @@ public class ItemViewActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     List<SlideModel> images;
     House incomingHouse;
+    String house_index;
+    ExtendedFloatingActionButton make_booking;
+    FirebaseAuth mAuth;
 
     private String TAG ="Items";
 
@@ -50,8 +62,13 @@ public class ItemViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_view);
-
+        mAuth = FirebaseAuth.getInstance();
         initiateShimmers();
+
+        if (mAuth.getCurrentUser()  == null) {
+            Intent login = new Intent(ItemViewActivity.this, LoginActivity.class);
+            startActivity(login);
+        }
 
         firestore = new Firestore();
 
@@ -73,7 +90,7 @@ public class ItemViewActivity extends AppCompatActivity {
     private void retrieveHouse() {
         Intent intent = getIntent();
         if (null != intent){
-            String house_index = intent.getStringExtra("Id");
+            house_index = intent.getStringExtra("Id");
             if (house_index != null){
                 docRef = db.collection("houses").document(house_index);
 
@@ -134,6 +151,7 @@ public class ItemViewActivity extends AppCompatActivity {
         house_bath_count = findViewById(R.id.itemView_bath_count);
         house_size = findViewById(R.id.itemView_size_count);
         slider = findViewById(R.id.image_slider);
+        make_booking = findViewById(R.id.make_booking);
 
         itemView_message = findViewById(R.id.itemView_message);
         itemView_call = findViewById(R.id.itemView_call);
@@ -142,6 +160,21 @@ public class ItemViewActivity extends AppCompatActivity {
         itemView_call.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + incomingHouse.getPhone_number()));// Initiates the Intent
             startActivity(intent);
+        });
+
+        // Floating action button for making booking
+        make_booking.setOnClickListener(v -> {
+            HashMap<String, String> order = new HashMap<>();
+            order.put("Client",mAuth.getUid());
+
+            // Add the order to the firebase collection
+            db.collection("houses/" + house_index + "/orders")
+                .document(mAuth.getUid())
+                .set(order).addOnCompleteListener(task -> {
+                    if (task.isSuccessful())
+                        Toast.makeText(ItemViewActivity.this, "Item Added successfully!", Toast.LENGTH_SHORT).show();
+                });
+
         });
 
         // Open message app with user's number to send message
