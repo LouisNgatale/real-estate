@@ -22,13 +22,10 @@ public class SplashScreen extends AppCompatActivity {
 
 //        TODO: Splash screen display only once at start up
         handler=new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent=new Intent(SplashScreen.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        handler.postDelayed(() -> {
+            Intent intent=new Intent(SplashScreen.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         },1000);
     }
 }

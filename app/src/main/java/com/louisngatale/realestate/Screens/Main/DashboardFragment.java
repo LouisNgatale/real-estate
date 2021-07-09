@@ -43,15 +43,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.louisngatale.realestate.Models.House;
-import com.louisngatale.realestate.OnUploadEventListener;
 import com.louisngatale.realestate.R;
 import com.louisngatale.realestate.RecyclerViews.PicturePreviewRecyclerAdapter;
 import com.louisngatale.realestate.Screens.Map;
-import com.louisngatale.realestate.Services.Firestorage;
 import com.louisngatale.realestate.Services.Firestore;
 import com.louisngatale.realestate.Utils.Validator;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -385,23 +381,9 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 }else {
                     Log.d(TAG, "onActivityResult: Image chooser result not ok");
                 }
-            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-//                cropImage(resultCode, data);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + requestCode);
-        }
-    }
-
-    private void cropImage(int resultCode, @Nullable Intent data) {
-        CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
-        if (resultCode == Activity.RESULT_OK){
-            Uri resultUri = result.getUri();
-            Log.d(TAG, "cropImage: "+ resultUri);
-        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-            Exception error = result.getError();
-            Log.d(TAG, "cropImage: "+ error);
         }
     }
 

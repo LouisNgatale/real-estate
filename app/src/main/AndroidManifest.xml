@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RealEstate"
         tools:ignore="AllowBackup">
-        <activity android:name=".Screens.RegisterActivity"></activity>
+        <activity android:name=".Screens.RegisterActivity" android:authorities="${applicationId}.contentprovider"/>
         <activity android:name=".Screens.LoginActivity" />
 
         <provider
@@ -59,9 +59,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Screens.Main.MainActivity" />
-        <activity
-            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
                     }
 //                        selectedFragment = new HomeFragment();
                     break;
+                default:
+                    selectedFragment = new HomeFragment();
+                    break;
             }
 
             assert selectedFragment != null;
