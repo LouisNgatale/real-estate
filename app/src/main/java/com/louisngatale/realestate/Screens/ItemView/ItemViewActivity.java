@@ -59,10 +59,10 @@ public class ItemViewActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         initiateShimmers();
 
-        if (mAuth.getCurrentUser()  == null) {
+        /*if (mAuth.getCurrentUser()  == null) {
             Intent login = new Intent(ItemViewActivity.this, LoginActivity.class);
             startActivity(login);
-        }
+        }*/
 
         firestore = new Firestore();
 

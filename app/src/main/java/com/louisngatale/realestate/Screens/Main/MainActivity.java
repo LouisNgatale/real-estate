@@ -1,4 +1,4 @@
-package com.louisngatale.realestate.Screens.Main;
+I package com.louisngatale.realestate.Screens.Main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,19 +27,18 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
         getSupportFragmentManager()
-                .beginTransaction()
-                .replace(
-                    R.id.fragment_container,
-                    new HomeFragment())
-                .commit();
-
+            .beginTransaction()
+            .replace(
+                R.id.fragment_container,
+                new HomeFragment())
+            .commit();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @SuppressLint("NonConstantResourceId")
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = null;
+            Fragment selectedFragment = new HomeFragment();
 
             switch (item.getItemId()){
                 case R.id.nav_home:
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_profile:
                     selectedFragment = new ProfileFragment();
                     break;
-                case  R.id.nav_dashboard:
+                case R.id.nav_dashboard:
                     if (mAuth.getCurrentUser() == null) {
                         Intent login = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(login);
@@ -63,12 +62,9 @@ public class MainActivity extends AppCompatActivity {
                     }
 //                        selectedFragment = new HomeFragment();
                     break;
-                default:
-                    selectedFragment = new HomeFragment();
-                    break;
             }
 
-            assert selectedFragment != null;
+//            assert selectedFragment != null;
             getSupportFragmentManager().beginTransaction().replace(
                     R.id.fragment_container,
                     selectedFragment

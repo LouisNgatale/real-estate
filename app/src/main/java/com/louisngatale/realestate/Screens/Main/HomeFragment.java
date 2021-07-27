@@ -61,12 +61,11 @@ public class HomeFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         firestore = new Firestore();
 
-//        Create query
+        // Create query
         Query query =
                 firestore.getAllHouses();
 
-
-//        Configure the adapter options
+        // Configure the adapter options
         FirestoreRecyclerOptions<House> options =
                 new FirestoreRecyclerOptions.Builder<House>()
                 .setQuery(query,House.class)
@@ -74,7 +73,7 @@ public class HomeFragment extends Fragment {
 
         adapter = new BrowseRecyclerViewAdapter(options,getContext());
 
-//        TODO: Load category list items from database
+        // TODO: Load category list items from database
         browse.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         browse.setAdapter(adapter);
         browse.setNestedScrollingEnabled(false);

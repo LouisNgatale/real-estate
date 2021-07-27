@@ -66,6 +66,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
         EXTERNAL_STORAGE_PERMISSION_CODE = 103,
         PICK_IMAGE = 104;
     private FirebaseAuth mAuth;
+    Button logout;
 
     private ImageView placeholder;
     String currentPhotoPath;
@@ -101,12 +102,17 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
         mAuth = FirebaseAuth.getInstance();
         mProgress = new ProgressDialog(getActivity());
+        logout = view.findViewById(R.id.logout);
 
         initializeSpinner(view);
 
         initializeViews(view);
 
         addressResult = new HashMap<>();
+        logout.setOnClickListener(v -> {
+            mAuth.signOut();
+            
+        });
 
     }
 
@@ -185,7 +191,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
 
         startActivityForResult(Intent.createChooser(galleryIntent,"SELECT IMAGE"),PICK_IMAGE);
     }
-
 
     @SuppressLint("QueryPermissionsNeeded")
     private void dispatchTakePictureIntent() {
@@ -467,7 +472,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemSel
                 break;
         }
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
